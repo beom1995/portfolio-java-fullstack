@@ -18,7 +18,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/tag/:tagName" element={<Tag />} />
+        <Route path="/tag" element={<Tag />} />
         <Route path="/project/:projectId" element={<Project />} />
         <Route path="/error" element={<Error />} />
       </Routes>
