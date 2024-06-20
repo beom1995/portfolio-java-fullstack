@@ -21,8 +21,8 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/tag" element={<Tag />} />
         <Route path="/project/:userName/:projectName" element={<Project />} />
-        <Route path="/error" element={<Error />} />
         <Route path="/project/:userName/create" element={<CreateProject />} />
+        <Route path="/error" element={<Error />} />
       </Routes>
     </div>
   );
