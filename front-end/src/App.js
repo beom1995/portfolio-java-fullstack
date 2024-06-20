@@ -8,19 +8,21 @@ import Tag from './components/Tag';
 import Home from './components/Home';
 import Search from './components/Search';
 import Error from './components/Error';
+import CreateProject from './components/CreateProject';
 
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/home" element={<Home />} />
+        <Route path="/project/:userName" element={<Home />} />
         <Route path="/" element={<Login />}/>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/tag/:tagName" element={<Tag />} />
-        <Route path="/project/:projectId" element={<Project />} />
+        <Route path="/tag" element={<Tag />} />
+        <Route path="/project/:userName/:projectName" element={<Project />} />
         <Route path="/error" element={<Error />} />
+        <Route path="/project/:userName/create" element={<CreateProject />} />
       </Routes>
     </div>
   );
