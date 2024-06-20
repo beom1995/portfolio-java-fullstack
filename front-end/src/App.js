@@ -8,6 +8,7 @@ import Tag from './components/Tag';
 import Home from './components/Home';
 import Search from './components/Search';
 import Error from './components/Error';
+import FileAndFolderUpload from './components/FileAndFolderUpload';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/tag/:tagName" element={<Tag />} />
         <Route path="/project/:projectId" element={<Project />} />
         <Route path="/error" element={<Error />} />
+        <Route path="/upload" element={<FileAndFolderUpload />} />
       </Routes>
     </div>
   );
