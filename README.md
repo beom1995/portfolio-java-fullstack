@@ -1,6 +1,6 @@
-# portfolio-java-fullstack
+# portfolio
 
-# react 설정
+## react 설정
 npm i install axios
 
 npm i install http-proxy-middleware
