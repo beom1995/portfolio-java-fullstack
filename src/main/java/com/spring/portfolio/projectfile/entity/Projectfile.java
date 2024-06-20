@@ -1,10 +1,11 @@
-package com.spring.portfolio.file.entity;
+package com.spring.portfolio.projectfile.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.spring.portfolio.project.entity.Project;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class File {
+public class Projectfile {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
