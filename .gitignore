@@ -24,14 +24,14 @@
 hs_err_pid*
 replay_pid*
 
+
 ### react ###
-node_modules/
 .DS_*
 logs
 **/*.backup.*
 **/*.back.*
 
-node_modules
+node_modules/
 bower_components
 
 *.sublime*
@@ -39,6 +39,7 @@ bower_components
 psd
 thumb
 sketch
+
 
 ### Windows ###
 # Windows thumbnail cache files
@@ -72,6 +73,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+
 ### STS ###
 .apt_generated
 .classpath
@@ -82,11 +84,13 @@ target/
 .sts4-cache
 application.properties
 
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
 *.iml
 *.ipr
+
 
 ### NetBeans ###
 /nbproject/private/
@@ -97,6 +101,7 @@ application.properties
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+
 
 ### VS Code ###
 .vscode/
