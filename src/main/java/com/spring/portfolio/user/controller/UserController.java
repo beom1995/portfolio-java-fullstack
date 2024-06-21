@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.spring.portfolio.user.dto.LoginRequest;
 import com.spring.portfolio.user.dto.SignupRequest;
 import com.spring.portfolio.user.dto.UserResponse;
 import com.spring.portfolio.user.service.UserService;
@@ -15,20 +14,15 @@ import com.spring.portfolio.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
     public ResponseEntity<UserResponse> signup(@RequestBody SignupRequest signupRequest) {
+    	System.out.println(signupRequest);
         UserResponse userResponse = userService.signup(signupRequest.getUserName(), signupRequest.getUserPassword());
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<UserResponse> login(@RequestBody LoginRequest loginRequest) {
-        UserResponse userResponse = userService.login(loginRequest.getUserName(), loginRequest.getUserPassword());
-        return ResponseEntity.ok(userResponse);
     }
 }
