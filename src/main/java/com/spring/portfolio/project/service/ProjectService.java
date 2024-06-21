@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.stereotype.Service;
 
 import com.spring.portfolio.project.dto.ProjectResponse;
 import com.spring.portfolio.project.entity.Project;
 import com.spring.portfolio.project.repository.ProjectRepository;
-import com.spring.portfolio.projectfile.dto.ProjectfileProjectResponse;
 import com.spring.portfolio.tag.dto.TagProjectResponse;
 import com.spring.portfolio.tag.entity.Tag;
 import com.spring.portfolio.tag.repository.TagRepository;
@@ -33,21 +33,15 @@ public class ProjectService {
 	public List<Project> getAllProjectsByUserName(String userName) {
 		User user = userRepository.findByUserName(userName)
 								  .orElseThrow(() -> new NoSuchElementException("유저 없음"));
+		
+		List<Project> projectList = projectRepository.findAllByUser(user);
+		System.out.println(projectList);
 		return projectRepository.findAllByUser(user);
 	}
 
 	// ProjectId로 Project 찾기
 	@Transactional
 	public Project getProjectByProjectId(Long projectId) {
-		Project project = projectRepository.findById(3L)
-				   .orElseThrow(() -> new NoSuchElementException("프로젝트 없음"));
-		System.out.println(project);
-		System.out.println("-------");
-		String projectTitle = "Test03";
-		Project test = projectRepository.findByProjectTitle(projectTitle)
-										.orElseThrow(() -> new NoSuchElementException("프로젝트 없음"));
-		System.out.println(test);
-		System.out.println("-------");
 		return projectRepository.findById(projectId)
 								.orElseThrow(() -> new NoSuchElementException("프로젝트 없음"));
 	}
@@ -57,11 +51,11 @@ public class ProjectService {
 	public Project getProjectByUserAndProjectTitle(String userName, String projectTitle) {
 		User user = userRepository.findByUserName(userName)
 								  .orElseThrow(() -> new NoSuchElementException("유저 없음"));
-		return projectRepository.findByUserAndProjectTitle(user, projectTitle)
-								.orElseThrow(() -> new NoSuchElementException("프로젝트 없음"));
+
+		return projectRepository.findByUserAndProjectTitle(user, projectTitle);
 	}
 	
-	// Project 추가
+//	 Project 추가
 	@Transactional
 	public Project addProject(int userId, int tagId, String projectTitle) {
 		User user = userRepository.findById(userId)
@@ -95,17 +89,9 @@ public class ProjectService {
 																 				.tagId(project.getTag().getTagId())
 																 				.tagName(project.getTag().getTagName())
 																 				.build())
-														 .files(project.getFiles().stream().map(file -> ProjectfileProjectResponse.builder()
-																 																  .fileId(file.getFileId())
-																 																  .fileName(file.getFileName())
-																 																  .fileOriginalName(file.getFileOriginalName())
-																 																  .filePath(file.getFilePath())
-																 																  .fileSize(file.getFileSize())
-																 																  .build())
-																 .collect(Collectors.toList()))
 														 .build();
 		return projectResponse;
 														 
 	}
-
+	
 }

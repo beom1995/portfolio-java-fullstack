@@ -49,28 +49,14 @@ public class ProjectController {
 		return new ResponseEntity<List<ProjectResponse>>(data, HttpStatus.OK);
 	}
 	
-	@GetMapping("/api/project-search/1")
-	public String getProjectByProjectId() {
-		projectService.getProjectByProjectId(1L);
-		return "Search Success";
-	}
-	
-//	public ResponseEntity<List<Project>> getAllProjectsByUser(@PathVariable String userName) {
-//		User user = userRepository.findByUserName(userName)
-//									  .orElseThrow(() -> new NoSuchElementException("유저 없음"));
-//		List<Project> data = projectService.getAllProjectsByUser(user);
-//		
-//		return new ResponseEntity<>(data, HttpStatus.OK);
-//	}
-	
 	@Transactional
 	@PostMapping("/api/project-create")
 	public String addProjectDummy() {
-		User user = userRepository.findById(1).orElseThrow(() -> new NoSuchElementException("유저 없음"));
+		User user = userRepository.findById(2).orElseThrow(() -> new NoSuchElementException("유저 없음"));
 		Tag tag = tagRepository.findById(1).orElseThrow(() -> new NoSuchElementException("태그 없음"));
 		
 		Project project = Project.builder()
-								 .projectTitle("My Project")
+								 .projectTitle("Test")
 								 .user(user)
 								 .tag(tag)
 								 .build();
@@ -114,7 +100,6 @@ public class ProjectController {
 		ProjectResponse data = null;
 		
 		try {
-//			Project project = projectService.getProjectByprojectId(projectId);
 			Project project = projectService.getProjectByUserAndProjectTitle(userName, projectTitle);
 			System.out.println(project);
 			data = projectService.convertToProjectResponse(project);
