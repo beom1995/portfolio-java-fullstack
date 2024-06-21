@@ -28,7 +28,7 @@ public class Project extends BaseEntity {
 	private String projectTitle;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn
 	private User user;
 	
 	@ManyToOne
