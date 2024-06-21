@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useCookies } from 'react-cookie';
 
 const Signup = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [userName, setUserName] = useState('');
+  const [userPassword, setUserPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const [cookies, setCookie] = useCookies(['token']);
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
+  const handleUserNameChange = (e) => {
+    setUserName(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+    setUserPassword(e.target.value);
   };
 
   const handleConfirmPasswordChange = (e) => {
@@ -24,21 +22,28 @@ const Signup = () => {
   };
 
   const handleSignup = async () => {
-    if (password !== confirmPassword) {
+    if (userPassword !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
 
     try {
-      const response = await axios.post('/api/signup', {
-        username,
-        password,
+      const response = await axios.post('/api/users/signup', {
+        userName: userName,
+        userPassword: userPassword
       });
-      // 회원가입 성공 시 쿠키에 토큰 저장 및 home 페이지로 이동
-      setCookie('token', response.data.token, { path: '/' });
-      navigate('/home');
+      
+      // 회원가입 성공 시 처리
+      console.log('Signup successful:', response.data);
+      // 로그인 페이지로 이동
+      navigate('/login');
     } catch (error) {
-      setError('Failed to sign up');
+      if (error.response) {
+        // 서버가 응답한 에러 메시지 사용
+        setError(error.response.data);
+      } else {
+        setError('Failed to sign up. Please try again.');
+      }
     }
   };
 
@@ -46,20 +51,20 @@ const Signup = () => {
     <div>
       <h1>Sign Up</h1>
       <div>
-        <label htmlFor="username">Username:</label>
+        <label htmlFor="userName">Username:</label>
         <input
           type="text"
-          id="username"
-          value={username}
-          onChange={handleUsernameChange}
+          id="userName"
+          value={userName}
+          onChange={handleUserNameChange}
         />
       </div>
       <div>
-        <label htmlFor="password">Password:</label>
+        <label htmlFor="userPassword">Password:</label>
         <input
           type="password"
-          id="password"
-          value={password}
+          id="userPassword"
+          value={userPassword}
           onChange={handlePasswordChange}
         />
       </div>
