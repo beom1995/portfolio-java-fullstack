@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import { Routes, Route } from "react-router-dom";
 import Project from './components/Project';
@@ -22,7 +21,7 @@ function App() {
         <Route path="/tag/:tagName" element={<Tag />} />
         <Route path="/project/:projectId" element={<Project />} />
         <Route path="/error" element={<Error />} />
-        <Route path="/upload" element={<FileAndFolderUpload />} />
+        <Route path="/project/:projectId/upload" element={<FileAndFolderUpload />} />
       </Routes>
     </div>
   );

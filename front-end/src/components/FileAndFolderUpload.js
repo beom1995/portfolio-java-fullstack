@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from 'styled-components';
 import axios from 'axios';
 
@@ -24,26 +24,49 @@ const CustomUploadButton = styled.label`
 function FileAndFolderUpload() {
     const [files, setFiles] = useState([]);
 
+    const { projectId } = useParams();
+
     const navigate = useNavigate();
 
-    const onDrop = (acceptedFiles) => {
-        console.log(acceptedFiles);
-        setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
+    const onDrop = (acceptedItems) => {
+        const validFiles = getFilesSmallerThanMaxSize(acceptedItems);
+        setFiles((prevFiles) => [...prevFiles, ...validFiles]);
     };
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         noClick: true,
+        webkitRelativePath: true,
         webkitdirectory: true,
         directory: true,
     });
 
-    const handleUploadChange = (event) => {
+    const handleFileUploadChange = (event) => {
         const uploadedFiles = event.target.files;
-        console.log(uploadedFiles);
-        const filesArray = Array.from(uploadedFiles);
-        setFiles((prevFiles) => [...prevFiles, ...filesArray]);
+        const Files = Array.from(uploadedFiles);
+        // const validFiles = getFilesSmallerThanMaxSize(uploadedFiles);
+
+        setFiles((prevFiles) => [...prevFiles, ...Files]);
     };
+
+    const handleFolderUploadChange = (event) => {
+        const uploadedFiles = event.target.files;
+        const Files = Array.from(uploadedFiles);
+        // const validFiles = getFilesSmallerThanMaxSize(uploadedFiles);
+
+        setFiles((prevFiles) => [...prevFiles, ...Files]);
+    };
+
+    const getFilesSmallerThanMaxSize = (Files) => {
+        const maxSize = 50 * 1024 * 1024; // 50MB in bytes
+        const validFiles = Array.from(Files).filter(file => file.size <= maxSize);
+        
+        if (validFiles.length !== Files.length) {
+            alert('파일 크기가 50MB를 초과하면 업로드할 수 없습니다.');
+        }
+
+        return validFiles;
+    }
 
     const removeFile = (fileName) => {
         setFiles((prevFiles) => {
@@ -55,35 +78,36 @@ function FileAndFolderUpload() {
         event.preventDefault();
 
         const formData = new FormData();
-        
-        if(files != []) {
-            formData.append('files', files);
 
-            // files.map((file) => {
-            //     formData.append('files', file);
-            // })
-        }
+        if(files.length > 0) {
 
-        console.log(Array.from(formData));
-        let projectId = 1;
+            files.forEach(file => {
+                formData.append('files', file);
+                formData.append('paths', file.path);
+            });
 
-        axios.post(`/api/project/{projectId}/files`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-        .then(() => {
-            navigate(`/project/{projectId}`);
-        })
-        .catch(error => {
-            console.log('저장실패' + error);
-        });
+            axios.post(`/api/project/${projectId}/files`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(() => {
+                navigate(`/project/${projectId}`);
+            })
+            .catch(error => {
+                console.log('업로드 실패: ' + error);
+            });
+
+        } else {
+            console.log('Add some files');
+        }        
     }
 
     return (
         <div>
             <form onSubmit={handleUploadSubmit}>
                 <div {...getRootProps({ className: 'dropzone' })} style={{ border: '3px dashed #cccccc', padding: '20px' }}>
+                    <input {...getInputProps()} />
                     {isDragActive ?
                         <h5>Drop the files here!</h5> : 
                         <h5>Drag & Drop some files here</h5>
@@ -97,7 +121,7 @@ function FileAndFolderUpload() {
                         id="file-upload-input"
                         name="files" 
                         multiple
-                        onChange={handleUploadChange}
+                        onChange={handleFileUploadChange}
                     />
                     <CustomUploadButton htmlFor='folder-upload-input'>
                         폴더 업로드
@@ -108,7 +132,7 @@ function FileAndFolderUpload() {
                         webkitdirectory="true" 
                         directory="true" 
                         multiple
-                        onChange={handleUploadChange}
+                        onChange={handleFolderUploadChange}
                     />
                 </div>
                 <div>
