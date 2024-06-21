@@ -7,28 +7,29 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.spring.portfolio.common.response.ErrorCode;
 import com.spring.portfolio.common.response.ErrorResponse;
 import com.spring.portfolio.user.exception.DuplicateUserNameException;
-
-import lombok.extern.slf4j.Slf4j;
+import com.spring.portfolio.user.exception.InvalidPasswordException;
+import com.spring.portfolio.user.exception.UserNotFoundException;
 
 @RestControllerAdvice
-@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateUserNameException.class)
-    public ResponseEntity<ErrorResponse> handleDuplicateUserNameException(DuplicateUserNameException ex) {
-        log.error("DuplicateUserNameException occurred: {}", ex.getMessage());
-        ErrorCode errorCode = ErrorCode.DUPLICATE_USER_NAME;
-        return ResponseEntity
-                .status(errorCode.getStatusCode())
-                .body(new ErrorResponse(errorCode));
+    public ResponseEntity<ErrorResponse> handleDuplicateUserException(DuplicateUserNameException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.DUPLICATE_USER, ex.getMessage());
+        return ResponseEntity.status(ErrorCode.DUPLICATE_USER.getStatusCode()).body(errorResponse);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(Exception ex) {
-        log.error("Unexpected exception occurred: {}", ex.getMessage());
-        ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
-        return ResponseEntity
-                .status(errorCode.getStatusCode())
-                .body(new ErrorResponse(errorCode));
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.USER_NOT_FOUND, ex.getMessage());
+        return ResponseEntity.status(ErrorCode.USER_NOT_FOUND.getStatusCode()).body(errorResponse);
     }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPasswordException(InvalidPasswordException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.INVALID_PASSWORD, ex.getMessage());
+        return ResponseEntity.status(ErrorCode.INVALID_PASSWORD.getStatusCode()).body(errorResponse);
+    }
+
+ 
 }
