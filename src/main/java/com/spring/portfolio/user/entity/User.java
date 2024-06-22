@@ -3,7 +3,6 @@ package com.spring.portfolio.user.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.spring.portfolio.project.entity.Project;
 
 import jakarta.persistence.CascadeType;
@@ -12,9 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,10 +34,9 @@ public class User {
 	@Column(name = "user_password")
 	private String userPw;
 	
-	@OneToMany(mappedBy = "user")
-	@ToString.Exclude
-	private List<Project> projects;
-	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Project> projects = new ArrayList<>();
+
 	@Builder
 	public User(int userId, String userName, String userPw, List<Project> projects) {
 		super();
@@ -49,5 +45,4 @@ public class User {
 		this.userPw = userPw;
 		this.projects = projects;
 	}
-	
 }

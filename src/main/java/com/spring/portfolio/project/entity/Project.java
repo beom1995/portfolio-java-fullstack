@@ -2,8 +2,6 @@ package com.spring.portfolio.project.entity;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spring.portfolio.common.entity.BaseEntity;
 import com.spring.portfolio.projectfile.entity.Projectfile;
 import com.spring.portfolio.tag.entity.Tag;
@@ -12,14 +10,12 @@ import com.spring.portfolio.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,11 +35,11 @@ public class Project extends BaseEntity {
 	@Column(name = "project_title")
 	private String projectTitle;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "tag_id")
 	private Tag tag;
 	

@@ -1,19 +1,33 @@
+import axios from "axios";
 import react, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import FileTree from "./FileTree";
 
 export default function Project() {
+    const { userName, projectTitle } = useParams();
     const [projectInfo, setProjectInfo] = useState([]);
     const [fileInfo, setFileInfo] = useState([]);
+    const [tag, setTag] = useState('');
     const navigate = useNavigate();
     
 
     useEffect(() => {
         // axios 이용하여 projectName 이용하여 project 정보 가져오기
-
+        console.log(projectTitle);
+        axios.get(`/api/project/${userName}/${projectTitle}`)
+             .then(response => {
+                const result = response.data;
+                setProjectInfo(result);
+                setTag(result.tag.tagName);
+                setFileInfo(result.files);
+             })
+             .catch(error => {
+                console.log(error);
+                navigate(`/error`)
+            });
     }, [])
 
     const handleTagSelectSearch = () => {
-        let tag = "css";
         navigate(`/search?q=${tag}`);
     }
 
@@ -22,31 +36,36 @@ export default function Project() {
     }
 
     const handleFileUpload = () => {
-
+        // FIleUpload --> 파일 컴포넌트...
     }
 
     const handleFileDownload = () => {
-        console.log('download');
+        // FileDownload --> 파일 컴포넌트...
     }
 
     const handleDeleteFile = () => {
         // axios DELETE 메소드 사용
+        // FileDelete --> 파일 컴포넌트...
 
+    }
+
+    const navigate = useNavigate();
+
+    const { projectId } = useParams();
+
+    const handleUploadButtonClick = () => {
+        navigate(`/project/${projectId}/upload`);
     }
 
     return (
         <div>
             <div>
-                <h1>Project Title</h1>
-                <h3 onClick={handleTagSelectSearch}>#Tag</h3>
+                <h1>{ projectInfo.projectTitle }</h1>
+                <h3 onClick={handleTagSelectSearch}>#{tag}</h3>
             </div>
-            <form onSubmit={handleFileUpload}>
-                <input type="file" onChange={handleFileChange}/>
-                <button type="submit">add</button>
-            </form>
             <div>
-                <li onClick={handleFileDownload}>Test File</li>
-                <button onClick={handleDeleteFile}>delete</button>
+                <button onClick={handleUploadButtonClick}>upload</button>
+                <FileTree projectId={projectInfo.projectId}/>
             </div>
         </div>
     );
