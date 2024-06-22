@@ -40,7 +40,6 @@ public class ProjectService {
 								  .orElseThrow(() -> new NoSuchElementException("유저 없음"));
 		
 		List<Project> projectList = projectRepository.findAllByUser(user);
-		System.out.println(projectList);
 		return projectRepository.findAllByUser(user);
 	}
 
@@ -75,8 +74,8 @@ public class ProjectService {
 	
 //	 Project 추가
 	@Transactional
-	public Project addProject(int userId, int tagId, String projectTitle) {
-		User user = userRepository.findById(userId)
+	public Project addProject(String userName, int tagId, String projectTitle) {
+		User user = userRepository.findByUserName(userName)
 								  .orElseThrow(() -> new NoSuchElementException("유저 없음"));
 		
 		Tag tag = tagRepository.findById(tagId)

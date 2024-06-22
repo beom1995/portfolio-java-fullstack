@@ -93,13 +93,14 @@ public class ProjectController {
 	// Project 생성 
 	@PostMapping("/api/project")
 	public ResponseEntity<ProjectResponse> addProject(@RequestBody CreateProjectRequest createProjectRequest) {
+		System.out.println(createProjectRequest.toString());
 		ProjectResponse data = null;
 		
 		try {
-			int userId = Integer.parseInt(createProjectRequest.getUserId());
 			int tagId = Integer.parseInt(createProjectRequest.getTagId());
-			Project project = projectService.addProject(userId, tagId, createProjectRequest.getProjectTitle());
+			Project project = projectService.addProject(createProjectRequest.getUserName(), tagId, createProjectRequest.getProjectTitle());
 			data = projectService.convertToProjectResponse(project);
+			data.setProjectTitle(data.getProjectTitle().replace(" ", "+"));
 		} catch (NoSuchElementException | NumberFormatException e) {
 			return new ResponseEntity<ProjectResponse>(data, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -114,8 +115,7 @@ public class ProjectController {
 		ProjectResponse data = null;
 		
 		try {
-			Project project = projectService.getProjectByUserAndProjectTitle(userName, projectTitle);
-			System.out.println(project);
+			Project project = projectService.getProjectByUserAndProjectTitle(userName, projectTitle.replace("+", " "));
 			data = projectService.convertToProjectResponse(project);
 		} catch(NoSuchElementException e) {
 			return new ResponseEntity<ProjectResponse>(data, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -126,18 +126,16 @@ public class ProjectController {
 	
 	// ProjectTitle 중복 검증 및 검증 완료된 projectTitle 반환
 	@GetMapping("/api/check")
-	public ResponseEntity<String> checkProjectTitle(@RequestParam String projectTitle, @RequestParam String userName) {
-		System.out.println(projectTitle);
+	public ResponseEntity checkProjectTitle(@RequestParam String projectTitle, @RequestParam String userName) {
 		String data = null;
 		
 		try {
 			String checkTitle = projectService.checkProjectTitle(userName, projectTitle);
-			data = checkTitle.replace(" ", "+");
 		} catch (DuplicateKeyException e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		return new ResponseEntity<String>(data, HttpStatus.OK);
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 
