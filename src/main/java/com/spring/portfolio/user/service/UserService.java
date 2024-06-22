@@ -29,10 +29,10 @@ public class UserService {
         }
         User user = User.builder()
                 .userName(userName)
-                .userPw(passwordEncoder.encode(userPassword)) // 비밀번호 암호화
+                .userPw(passwordEncoder.encode(userPassword))
                 .build();
         User savedUser = userRepository.save(user);
-        String token = jwtTokenProvider.createToken(savedUser.getUserName());
+        String token = jwtTokenProvider.createToken(savedUser.getUserId());
         return convertToUserResponse(savedUser, token);
     }
 
@@ -40,18 +40,18 @@ public class UserService {
         User user = userRepository.findByUserName(userName)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
-        if (!passwordEncoder.matches(userPassword, user.getUserPw())) { // 암호화된 비밀번호 비교
+        if (!passwordEncoder.matches(userPassword, user.getUserPw())) {
             throw new InvalidPasswordException("비밀번호가 일치하지 않습니다.");
         }
 
-        String token = jwtTokenProvider.createToken(user.getUserName());
+        String token = jwtTokenProvider.createToken(user.getUserId());
         return convertToUserResponse(user, token);
     }
 
     public UserResponse getUserById(int userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
-        String token = jwtTokenProvider.createToken(user.getUserName());
+        String token = jwtTokenProvider.createToken(user.getUserId());
         return convertToUserResponse(user, token);
     }
 
