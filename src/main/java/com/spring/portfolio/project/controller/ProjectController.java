@@ -8,6 +8,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,7 +47,8 @@ public class ProjectController {
 		try {
 			List<Project> projectList = projectService.getAllProjectsByUserName(userName);
 			for(Project project : projectList) {
-				data.add(projectService.convertToProjectResponse(project));
+				ProjectResponse projectResponse = projectService.convertToProjectResponse(project);
+				data.add(projectResponse);
 			}
 		} catch(NoSuchElementException e) {
 			return new ResponseEntity<List<ProjectResponse>>(data, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -59,35 +61,6 @@ public class ProjectController {
 	public PageResponseDTO<ProjectResponse, Project> getProjectPage(PageRequestDTO pageRequest) {
 		System.out.println(pageRequest);
 		return projectService.getProjectPageList(pageRequest);
-	}
-	
-	@Transactional
-	@PostMapping("/api/project-create")
-	public String addProjectDummy() {
-		User user = userRepository.findById(2).orElseThrow(() -> new NoSuchElementException("유저 없음"));
-		Tag tag = tagRepository.findById(1).orElseThrow(() -> new NoSuchElementException("태그 없음"));
-		
-		Project project = Project.builder()
-								 .projectTitle("Test")
-								 .user(user)
-								 .tag(tag)
-								 .build();
-		
-		projectRepository.save(project);
-		
-//		for(int i = 0; i < 8 ; i++) {
-//			for(int j = 1; j <= 8; j ++) {
-//				Tag tag = tagRepository.findById(j).orElseThrow(() -> new NoSuchElementException("태그 없음"));
-//				Project project = Project.builder()
-//										 .projectTitle("Test" + i + j)
-//										 .user(user)
-//										 .tag(tag)
-//										 .build();
-//				projectRepository.save(project);
-//				}
-//			}
-		
-		return "project add success";
 	}
 	
 	// Project 생성 
@@ -133,6 +106,19 @@ public class ProjectController {
 			String checkTitle = projectService.checkProjectTitle(userName, projectTitle);
 		} catch (DuplicateKeyException e) {
 			return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity(HttpStatus.OK);
+	}
+	
+	// Project 삭제(cascade File 삭제)
+	@DeleteMapping("/api/project/{projectId}")
+	public ResponseEntity<String> deleteProjectByProjectId(@PathVariable Long projectId) {
+
+		try {
+			projectService.deleteProjectByProjectId(projectId);
+		} catch (NoSuchElementException e) {
+			return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		return new ResponseEntity(HttpStatus.OK);

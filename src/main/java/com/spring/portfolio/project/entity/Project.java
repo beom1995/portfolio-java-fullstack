@@ -12,6 +12,7 @@ import com.spring.portfolio.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,15 +39,15 @@ public class Project extends BaseEntity {
 	@Column(name = "project_title")
 	private String projectTitle;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "tag_id")
 	private Tag tag;
 	
-	@OneToMany(mappedBy = "fileId", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE)
 	private List<Projectfile> files;
 
 	@Builder

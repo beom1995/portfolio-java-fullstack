@@ -94,6 +94,7 @@ public class ProjectService {
 	}
 	
 	// ProjectTitle 중복 확인
+	@Transactional
 	public String checkProjectTitle(String userName, String projectTitle) {
 		User user = userRepository.findByUserName(userName)
 								  .orElseThrow(() -> new NoSuchElementException("유저 없음"));
@@ -104,6 +105,13 @@ public class ProjectService {
 		}
 		
 		return projectTitle;
+	}
+	
+	@Transactional
+	public void deleteProjectByProjectId(Long projectId) {
+		Project project = projectRepository.findById(projectId)
+										   .orElseThrow(() -> new NoSuchElementException("유저 없음"));
+		projectRepository.delete(project);
 	}
 	
 	public ProjectResponse convertToProjectResponse(Project project) {
