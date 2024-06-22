@@ -1,5 +1,6 @@
 import react, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import FileTree from "./FileTree";
 
 export default function Project() {
     const [projectInfo, setProjectInfo] = useState([]);
@@ -34,20 +35,19 @@ export default function Project() {
 
     }
 
+    const navigate = useNavigate();
+
+    const { projectId } = useParams();
+
+    const handleUploadButtonClick = () => {
+        navigate(`/project/${projectId}/upload`);
+    }
+
     return (
         <div>
-            <div>
-                <h1>Project Title</h1>
-                <h3 onClick={handleTagSelectSearch}>#Tag</h3>
-            </div>
-            <form onSubmit={handleFileUpload}>
-                <input type="file" onChange={handleFileChange}/>
-                <button type="submit">add</button>
-            </form>
-            <div>
-                <li onClick={handleFileDownload}>Test File</li>
-                <button onClick={handleDeleteFile}>delete</button>
-            </div>
+            <h1>project</h1>
+            <button onClick={handleUploadButtonClick}>upload</button>
+            <FileTree projectId={projectId}/>
         </div>
     );
 }
