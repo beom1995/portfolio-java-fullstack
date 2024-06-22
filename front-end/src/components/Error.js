@@ -1,10 +1,15 @@
-import react from "react";
+import React from 'react';
 
-export default function Error() {
+const ErrorModal = ({ error, onClose }) => {
+  return (
+    <div className="modal">
+      <div className="modal-content">
+        <span className="close" onClick={onClose}>&times;</span>
+        {error.statusCode && <h3>Error {error.statusCode}</h3>}
+        <p>{error.message}</p>
+      </div>
+    </div>
+  );
+};
 
-    return (
-        <div>
-            <h1>Error</h1>
-        </div>
-    );
-}
+export default ErrorModal;
