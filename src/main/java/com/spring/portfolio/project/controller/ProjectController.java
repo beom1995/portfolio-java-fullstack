@@ -4,14 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.portfolio.common.dto.PageRequestDTO;
+import com.spring.portfolio.common.dto.PageResponseDTO;
+import com.spring.portfolio.project.dto.CreateProjectRequest;
 import com.spring.portfolio.project.dto.ProjectResponse;
 import com.spring.portfolio.project.entity.Project;
 import com.spring.portfolio.project.repository.ProjectRepository;
@@ -49,6 +55,12 @@ public class ProjectController {
 		return new ResponseEntity<List<ProjectResponse>>(data, HttpStatus.OK);
 	}
 	
+	@GetMapping("/api/projects/page")
+	public PageResponseDTO<ProjectResponse, Project> getProjectPage(PageRequestDTO pageRequest) {
+		System.out.println(pageRequest);
+		return projectService.getProjectPageList(pageRequest);
+	}
+	
 	@Transactional
 	@PostMapping("/api/project-create")
 	public String addProjectDummy() {
@@ -78,19 +90,21 @@ public class ProjectController {
 		return "project add success";
 	}
 	
-	
+	// Project 생성 
 	@PostMapping("/api/project")
-	public ResponseEntity<Project> addProject(@RequestBody int userId, @RequestBody int tagId, @RequestBody String projectTitle) {
-		System.out.println(userId);
-		Project data = null;
+	public ResponseEntity<ProjectResponse> addProject(@RequestBody CreateProjectRequest createProjectRequest) {
+		ProjectResponse data = null;
 		
 		try {
-			data = projectService.addProject(userId, tagId, projectTitle);
-		} catch (NoSuchElementException e) {
-			return new ResponseEntity<Project>(data, HttpStatus.INTERNAL_SERVER_ERROR);
+			int userId = Integer.parseInt(createProjectRequest.getUserId());
+			int tagId = Integer.parseInt(createProjectRequest.getTagId());
+			Project project = projectService.addProject(userId, tagId, createProjectRequest.getProjectTitle());
+			data = projectService.convertToProjectResponse(project);
+		} catch (NoSuchElementException | NumberFormatException e) {
+			return new ResponseEntity<ProjectResponse>(data, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		return new ResponseEntity<Project>(data, HttpStatus.OK);
+		return new ResponseEntity<ProjectResponse>(data, HttpStatus.OK);
 	}
 	
 	// User의 단일 프로젝트 페이지 가져오기
@@ -108,6 +122,22 @@ public class ProjectController {
 		}
 		
 		return new ResponseEntity<ProjectResponse>(data, HttpStatus.OK);
+	}
+	
+	// ProjectTitle 중복 검증 및 검증 완료된 projectTitle 반환
+	@GetMapping("/api/check")
+	public ResponseEntity<String> checkProjectTitle(@RequestParam String projectTitle, @RequestParam String userName) {
+		System.out.println(projectTitle);
+		String data = null;
+		
+		try {
+			String checkTitle = projectService.checkProjectTitle(userName, projectTitle);
+			data = checkTitle.replace(" ", "+");
+		} catch (DuplicateKeyException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<String>(data, HttpStatus.OK);
 	}
 
 

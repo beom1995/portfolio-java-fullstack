@@ -2,11 +2,16 @@ package com.spring.portfolio.project.service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
-import org.hibernate.internal.build.AllowSysOut;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.spring.portfolio.common.dto.PageRequestDTO;
+import com.spring.portfolio.common.dto.PageResponseDTO;
 import com.spring.portfolio.project.dto.ProjectResponse;
 import com.spring.portfolio.project.entity.Project;
 import com.spring.portfolio.project.repository.ProjectRepository;
@@ -55,6 +60,19 @@ public class ProjectService {
 		return projectRepository.findByUserAndProjectTitle(user, projectTitle);
 	}
 	
+	@Transactional
+	public PageResponseDTO<ProjectResponse, Project> getProjectPageList(PageRequestDTO pageRequest) { // page == 몇 번째 페이지? / size == 한 페이지 당 몇 개?
+		
+		User user = userRepository.findByUserName(pageRequest.getUserName())
+								  .orElseThrow(() -> new NoSuchElementException("유저 없음"));
+		Pageable pageable = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
+		Page<Project> result = projectRepository.findAllByUser(user, pageable);
+
+		Function<Project, ProjectResponse> fn = (entity -> convertToProjectResponse(entity)); // 서비스단에서 DTO로 변경하는 함수를 PageResponseDTO에 넘겨주어야 함
+		
+		return new PageResponseDTO<>(result, fn);
+	}
+	
 //	 Project 추가
 	@Transactional
 	public Project addProject(int userId, int tagId, String projectTitle) {
@@ -74,6 +92,19 @@ public class ProjectService {
 		
 		return project;
 		
+	}
+	
+	// ProjectTitle 중복 확인
+	public String checkProjectTitle(String userName, String projectTitle) {
+		User user = userRepository.findByUserName(userName)
+								  .orElseThrow(() -> new NoSuchElementException("유저 없음"));
+		boolean result = projectRepository.existsByProjectTitleAndUser(projectTitle, user);
+		
+		if(result) {
+			throw new DuplicateKeyException("프로젝트 이름 중복");
+		}
+		
+		return projectTitle;
 	}
 	
 	public ProjectResponse convertToProjectResponse(Project project) {
