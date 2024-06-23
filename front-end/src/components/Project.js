@@ -4,14 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import FileTree from "./FileTree";
 
 export default function Project() {
-
     const { userName, projectTitle } = useParams();
     const [projectInfo, setProjectInfo] = useState([]);
     const [fileInfo, setFileInfo] = useState([]);
     const [tag, setTag] = useState('');
     const navigate = useNavigate();
     
-
     useEffect(() => {
         // axios 이용하여 projectName 이용하여 project 정보 가져오기
         console.log(projectTitle);
