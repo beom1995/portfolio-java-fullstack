@@ -131,5 +131,10 @@ public class ProjectService {
 		return projectResponse;
 														 
 	}
+
+	// project search
+	public List<Project> searchProjectsByKeyword(String keyword) {
+        	return projectRepository.findByProjectTitleContainingIgnoreCase(keyword);
+    	}
 	
 }
