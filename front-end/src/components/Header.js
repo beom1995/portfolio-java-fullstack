@@ -11,19 +11,6 @@ const HeaderArea = styled.header`
   margin-top: 20px;
 `;
 
-const HeaderContent = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Logo = styled.h1`
-  font-size: 1.5rem;
-  margin: 0;
-`;
-
 const Button = styled.button`
   margin-top: 10px;
   padding: 10px;

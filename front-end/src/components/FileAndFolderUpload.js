@@ -39,7 +39,6 @@ function FileAndFolderUpload() {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
-        // noClick: true,
         webkitRelativePath: true,
         webkitdirectory: true,
         directory: true,
@@ -90,13 +89,13 @@ function FileAndFolderUpload() {
                 formData.append('paths', file.path);
             });
 
-            axios.post(`/api/project/${projectInfo.projectId}/files`, formData, {
+            axios.post(`/api/project/${projectInfo.projectInfo.projectId}/files`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
             .then(() => {
-                navigate(`/project/${projectInfo.userName}/${projectInfo.projectName}`);
+                navigate(`/project/${projectInfo.projectInfo.userName}/${projectInfo.projectInfo.projectName}`);
             })
             .catch(error => {
                 console.log('업로드 실패: ' + error);
@@ -118,7 +117,7 @@ function FileAndFolderUpload() {
                         <h5>Drag & Drop some files here, or click to upload files.</h5>
                     }   
                 </div>
-                <div>
+                {/* <div>
                     <CustomUploadButton htmlFor='file-upload-input'>
                         파일 업로드
                     </CustomUploadButton>
@@ -139,7 +138,7 @@ function FileAndFolderUpload() {
                         multiple
                         onChange={handleFolderUploadChange}
                     />
-                </div>
+                </div> */}
                 <div>
                     <h3>Waiting to be uploaded</h3>
                     <ul>
