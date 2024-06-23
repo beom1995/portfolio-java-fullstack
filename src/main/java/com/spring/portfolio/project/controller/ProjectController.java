@@ -58,17 +58,12 @@ public class ProjectController {
 	// Project 생성 
 	@PostMapping("/api/project")
 	public ResponseEntity<ProjectResponse> addProject(@RequestBody CreateProjectRequest createProjectRequest) {
-		System.out.println(createProjectRequest.toString());
 		ProjectResponse data = null;
-		
-		try {
-			int tagId = Integer.parseInt(createProjectRequest.getTagId());
-			Project project = projectService.addProject(createProjectRequest.getUserName(), tagId, createProjectRequest.getProjectTitle());
-			data = projectService.convertToProjectResponse(project);
-			data.setProjectTitle(data.getProjectTitle().replace(" ", "+"));
-		} catch (NoSuchElementException | NumberFormatException e) {
-			return new ResponseEntity<ProjectResponse>(data, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+
+		int tagId = Integer.parseInt(createProjectRequest.getTagId());
+		Project project = projectService.addProject(createProjectRequest.getUserName(), tagId, createProjectRequest.getProjectTitle());
+		data = projectService.convertToProjectResponse(project);
+		data.setProjectTitle(data.getProjectTitle().replace(" ", "+"));
 		
 		return new ResponseEntity<ProjectResponse>(data, HttpStatus.OK);
 	}
@@ -77,13 +72,8 @@ public class ProjectController {
 	@GetMapping("/api/project/{userName}/{projectTitle}")
 	public ResponseEntity<ProjectResponse> getProjectByUserNameAndProjectTitle(@PathVariable("userName") String userName, @PathVariable("projectTitle") String projectTitle) {
 		ProjectResponse data = null;
-		
-		try {
-			Project project = projectService.getProjectByUserAndProjectTitle(userName, projectTitle.replace("+", " "));
-			data = projectService.convertToProjectResponse(project);
-		} catch(NoSuchElementException e) {
-			return new ResponseEntity<ProjectResponse>(data, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		Project project = projectService.getProjectByUserAndProjectTitle(userName, projectTitle);
+		data = projectService.convertToProjectResponse(project);
 		
 		return new ResponseEntity<ProjectResponse>(data, HttpStatusCode.valueOf(200));
 	}
@@ -91,28 +81,15 @@ public class ProjectController {
 	// ProjectTitle 중복 검증 및 검증 완료된 projectTitle 반환
 	@GetMapping("/api/check")
 	public ResponseEntity checkProjectTitle(@RequestParam String projectTitle, @RequestParam String userName) {
-		String data = null;
-		
-		try {
-			String checkTitle = projectService.checkProjectTitle(userName, projectTitle);
-		} catch (DuplicateKeyException e) {
-			return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
+		projectService.checkProjectTitle(userName, projectTitle);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 	
 	// Project 삭제(cascade File 삭제)
-	@PreAuthorize("@projectSecurityExpression.isProjectOwner(authentication, #projectId)") // access only owner
+//	@PreAuthorize("@projectSecurityExpression.isProjectOwner(authentication, #projectId)") // access only owner
     @DeleteMapping("/api/project/{projectId}")
-	public ResponseEntity<String> deleteProjectByProjectId(@PathVariable Long projectId) {
-
-		try {
-			projectService.deleteProjectByProjectId(projectId);
-		} catch (NoSuchElementException e) {
-			return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-		}
-		
+	public ResponseEntity deleteProjectByProjectId(@PathVariable Long projectId) {
+		projectService.deleteProjectByProjectId(projectId);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
