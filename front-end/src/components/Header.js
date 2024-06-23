@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../logo.png';
 
 const HeaderArea = styled.header`
-  text-align: center;
-  font-size: 2rem;
-  color: #333;
-  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
 `;
 
 const Button = styled.button`
@@ -18,7 +18,6 @@ const Button = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  
 `;
 
 const HomeButton = styled(Button)`
@@ -37,23 +36,22 @@ const LogoutButton = styled(Button)`
 `;
 
 export default function Header() {
-    const [cookies, removeCookie] = useCookies(['token', 'userId', 'userName']);
-    const navigate = useNavigate();
+  const [cookies, removeCookie] = useCookies(['token', 'userId', 'userName']);
+  const navigate = useNavigate();
 
-    const handleMoveToHome = () => {
-        navigate(`/project/${cookies.userName}`);
-    };
+  const handleMoveToHome = () => {
+    navigate(`/project/${cookies.userName}`);
+  };
 
-    const handleLogout = () => {
-        removeCookie('token');
-        navigate(`/login`);
-    };
-    
-    return (
-        <HeaderArea>
-            <HomeButton onClick={handleMoveToHome} />
-            <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
-        </HeaderArea>
-    );
+  const handleLogout = () => {
+    removeCookie('token');
+    navigate(`/login`);
+  };
+
+  return (
+    <HeaderArea>
+      <HomeButton onClick={handleMoveToHome} />
+      <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+    </HeaderArea>
+  );
 }
-
