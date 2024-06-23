@@ -18,10 +18,18 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/search" element={<Search />} />
+<<<<<<< Updated upstream
         <Route path="/tag/:tagName" element={<Tag />} />
         <Route path="/project/:projectId" element={<Project />} />
+=======
+        <Route path="/search-results" element={<SearchResults />} />
+        <Route path="/tags" element={<Tag />} />
+        <Route path="/tags/:tagName" element={<TagSearchResults />} />
+        <Route path="/project/:userName/create" element={<CreateProject />} />
+        <Route path="/project/:userName/:projectName" element={<Project />} />
+        <Route path="/project/:userName/:projectName/upload" element={<FileAndFolderUpload />} />
+>>>>>>> Stashed changes
         <Route path="/error" element={<Error />} />
-        <Route path="/project/:projectId/upload" element={<FileAndFolderUpload />} />
       </Routes>
     </div>
   );

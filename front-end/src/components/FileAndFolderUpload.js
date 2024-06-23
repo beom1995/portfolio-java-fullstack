@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from 'styled-components';
 import axios from 'axios';
 
@@ -24,9 +24,11 @@ const CustomUploadButton = styled.label`
 function FileAndFolderUpload() {
     const [files, setFiles] = useState([]);
 
-    const { projectId } = useParams();
+    const { userName, projectTitle } = useParams();
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const projectInfo = location.state || {};
 
     const onDrop = (acceptedItems) => {
         const validFiles = getFilesSmallerThanMaxSize(acceptedItems);
@@ -35,7 +37,7 @@ function FileAndFolderUpload() {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
-        noClick: true,
+        // noClick: true,
         webkitRelativePath: true,
         webkitdirectory: true,
         directory: true,
@@ -86,13 +88,13 @@ function FileAndFolderUpload() {
                 formData.append('paths', file.path);
             });
 
-            axios.post(`/api/project/${projectId}/files`, formData, {
+            axios.post(`/api/project/${projectInfo.projectId}/files`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
             .then(() => {
-                navigate(`/project/${projectId}`);
+                navigate(`/project/${projectInfo.userName}/${projectInfo.projectName}`);
             })
             .catch(error => {
                 console.log('업로드 실패: ' + error);
@@ -110,7 +112,7 @@ function FileAndFolderUpload() {
                     <input {...getInputProps()} />
                     {isDragActive ?
                         <h5>Drop the files here!</h5> : 
-                        <h5>Drag & Drop some files here</h5>
+                        <h5>Drag & Drop some files here, or click to upload files.</h5>
                     }   
                 </div>
                 <div>
