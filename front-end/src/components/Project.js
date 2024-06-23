@@ -36,10 +36,17 @@ export default function Project() {
                 navigate(`/error`)
             });
     }, [])
+<<<<<<< Updated upstream
 
     const handleTagSelectSearch = () => {
         navigate(`/search?q=${tag}`);
     };
+>>>>>>> Stashed changes
+=======
+  
+    const handleTagSelectSearch = () => {
+        navigate(`/tags/${tag}`);
+    }
 >>>>>>> Stashed changes
 
     const handleUploadButtonClick = () => {
