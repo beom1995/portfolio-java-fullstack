@@ -2,6 +2,7 @@ import axios from "axios";
 import react, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Pagination from "./Pagination";
+import Header from "./Header";
 
 export default function Home() {
     const [projectInfo, setProjectInfo] = useState([]);
@@ -27,7 +28,12 @@ export default function Home() {
         if(isDelete) {
             setIsDelete(false);
         }
-        fetchProjectInfo(projectInfo.page - 1);
+
+        if(!projectInfo.page) {
+            fetchProjectInfo(0);
+        } else{
+            fetchProjectInfo(projectInfo.page - 1);
+        }
     }, [isDelete])
 
     const handleProjectSearch = () => {
@@ -35,7 +41,7 @@ export default function Home() {
     }
 
     const handleTagSearch = () => {
-        navigate(`/tag`);
+        navigate(`/tags`);
     }
 
     const handleAddProject = () => {
@@ -58,6 +64,7 @@ export default function Home() {
 
     return (
         <div>
+            <Header />
             <div>
                 <button onClick={handleProjectSearch}>Search</button>
                 <button onClick={handleTagSearch}>Tag</button>
@@ -67,18 +74,21 @@ export default function Home() {
                 <button onClick={handleAddProject}>create</button>
             </div>
             <div>
-                <ul>
-                    {projectInfo.resultList && projectInfo.resultList.map((project) => (
-                        <div>
-                            <li key={project.projectId} id={project.projectTitle} onClick={handleSelectProject}>
-                            {project.projectTitle}</li>
+                <div>
+                    <ul>
+                        {projectInfo.resultList && projectInfo.resultList.map((project) => (
+                        <div key={project.projectId}>
+                            <li id={project.projectTitle} onClick={handleSelectProject}>
+                            {project.projectTitle}
+                            </li>
                             <button id={project.projectId} onClick={handleDeleteProject}>delete</button>
                         </div>
-                    ))}
-                </ul>
-                <Pagination
-                    projectInfo={projectInfo}
-                    handleProjectPageInfo={fetchProjectInfo} />
+                        ))}
+                    </ul>
+                    <Pagination
+                        pageInfo={projectInfo}
+                        handlePageInfo={fetchProjectInfo} />
+                </div>
             </div>
         </div>
     );
