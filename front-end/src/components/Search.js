@@ -14,7 +14,7 @@ const Search = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(`/api/search?keyword=${searchTerm}`);
+      const response = await fetch(`/api/search?keyword=${searchTerm}&page=0`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

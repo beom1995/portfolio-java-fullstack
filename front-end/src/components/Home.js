@@ -24,19 +24,19 @@ export default function Home() {
         fetchProjectInfo(0);
     }, []);
 
-    useEffect(() => {
-        if(isDelete) {
-            setIsDelete(false);
-        }
-        fetchProjectInfo(projectInfo.page - 1);
-    }, [isDelete])
+    // useEffect(() => {
+    //     if(isDelete) {
+    //         setIsDelete(false);
+    //     }
+    //     // fetchProjectInfo(projectInfo.page - 1);
+    // }, [isDelete])
 
     const handleProjectSearch = () => {
         navigate('/search');
     }
 
     const handleTagSearch = () => {
-        navigate(`/tag`);
+        navigate(`/tags`);
     }
 
     const handleAddProject = () => {
@@ -79,8 +79,8 @@ export default function Home() {
                     ))}
                 </ul>
                 <Pagination
-                    projectInfo={projectInfo}
-                    handleProjectPageInfo={fetchProjectInfo} />
+                    pageInfo={projectInfo}
+                    handlePageInfo={fetchProjectInfo} />
             </div>
         </div>
     );

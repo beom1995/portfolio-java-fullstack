@@ -1,26 +1,24 @@
 import React from "react";
 
-export default function Pagination({ pageInfo, handlePageInfo }) {
+export default function SearchPagination({ keyword, pageInfo, handlePageInfo}) {
 
     return (
         <div>
             {pageInfo.prev?
             (<li>
-                <span onClick={() => handlePageInfo(Math.min(...pageInfo.pageList) - 11)}>&lt;</span>
+                <span onClick={() => handlePageInfo(keyword, Math.min(...pageInfo.pageList) - 11)}>&lt;</span>
             </li>)
             :
             (<></>)
             }
-            <div>
             {pageInfo.pageList && pageInfo.pageList.map((pageNumber) => (
                 <li key={pageNumber}>
-                    <span onClick={() => handlePageInfo(pageNumber - 1)}>{pageNumber}</span>
+                <span onClick={() => handlePageInfo(keyword, pageNumber - 1)}>{pageNumber}</span>
                 </li>
             ))}
-            </div>
             {pageInfo.next?
             (<li>
-                <span onClick={() => handlePageInfo(Math.max(...pageInfo.pageList))}>&gt;</span>
+                <span onClick={() => handlePageInfo(keyword, Math.max(...pageInfo.pageList))}>&gt;</span>
             </li>)
             :
             (<></>)
