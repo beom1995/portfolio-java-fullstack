@@ -38,7 +38,7 @@ public class SecurityConfig {
             .cors().and()
             .csrf().disable()
             .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/api/signup", "/api/login").permitAll() // 회원가입, 로그인 API 권한 허용
+                .requestMatchers("/api/**").permitAll() // API 권한 허용
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
