@@ -9,6 +9,8 @@ import Search from './components/Search';
 import Error from './components/Error';
 import FileAndFolderUpload from './components/FileAndFolderUpload';
 import CreateProject from './components/CreateProject';
+import SearchResults from './components/SearchResults';
+import TagSearchResults from './components/TagSearchResults';
 
 function App() {
   return (
@@ -19,7 +21,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/tag" element={<Tag />} />
+        <Route path="/search-results" element={<SearchResults />} />
+        <Route path="/tags" element={<Tag />} />
+        <Route path="/tags/:tagName" element={<TagSearchResults />} />
         <Route path="/project/:userName/:projectName" element={<Project />} />
         <Route path="/project/:userName/create" element={<CreateProject />} />
         <Route path="/error" element={<Error />} />
