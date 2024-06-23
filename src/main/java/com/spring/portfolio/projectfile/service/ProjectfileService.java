@@ -1,14 +1,12 @@
 package com.spring.portfolio.projectfile.service;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.spring.portfolio.project.entity.Project;
 import com.spring.portfolio.projectfile.dto.ProjectfileDTO;
 import com.spring.portfolio.projectfile.entity.Projectfile;
 import com.spring.portfolio.projectfile.repository.ProjectfileRepository;

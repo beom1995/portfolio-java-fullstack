@@ -1,22 +1,17 @@
 package com.spring.portfolio.projectfile.entity;
 
-<<<<<<< Updated upstream
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//import org.hibernate.annotations.OnDelete;
+//import org.hibernate.annotations.OnDeleteAction;
+//
+//import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-=======
->>>>>>> Stashed changes
 import com.spring.portfolio.project.entity.Project;
-import com.spring.portfolio.tag.entity.Tag;
-import com.spring.portfolio.user.entity.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,9 +26,6 @@ import lombok.ToString;
 @Getter
 @ToString
 @Entity
-@Getter
-@NoArgsConstructor
-@ToString
 public class Projectfile {
 
 	@Id
@@ -57,21 +49,10 @@ public class Projectfile {
 	@JoinColumn(name = "project_id")
 	@ToString.Exclude
 	private Project project;
-
-	@Builder
-	public Projectfile(Long fileId, String filePath, String fileName, String fileOriginalName, Long fileSize, Project project) {
-		this.fileId = fileId;
-		this.filePath = filePath;
-		this.fileName = fileName;
-		this.fileOriginalName = fileOriginalName;
-		this.fileSize = fileSize;
-		this.project = project;
-	}
 	
 	@Builder
 	public Projectfile(Long fileId, String filePath, String fileName, String fileOriginalName, Long fileSize,
 			Project project) {
-		super();
 		this.fileId = fileId;
 		this.filePath = filePath;
 		this.fileName = fileName;
