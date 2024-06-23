@@ -51,7 +51,8 @@ public class ProjectfileController {
 		File directory = new File(projectDir);
 		
 		if (directory.exists()) {
-			return buildFileTree(new File(projectDir));            
+			return buildFileTree(directory);            
+//			return buildFileTree(new File(projectDir));            
         } else {
         	return List.of();
         }
@@ -61,6 +62,7 @@ public class ProjectfileController {
 	    List<FileNode> nodes = new ArrayList<>();
 	    File[] files = projectDir.listFiles();
 	    
+	    System.out.println("nodes: " + nodes);
 	    if (files != null) {
 	        for (File file: files) {
 	            FileNode node = new FileNode();
