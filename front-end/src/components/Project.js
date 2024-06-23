@@ -32,14 +32,6 @@ export default function Project() {
         navigate(`/project/${projectInfo.projectId}/upload`);
     }
 
-    const navigate = useNavigate();
-
-    const { projectId } = useParams();
-
-    const handleUploadButtonClick = () => {
-        navigate(`/project/${projectId}/upload`);
-    }
-
     return (
         <div>
             <div>
