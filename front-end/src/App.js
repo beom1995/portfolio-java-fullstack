@@ -8,27 +8,25 @@ import Home from './components/Home';
 import Search from './components/Search';
 import Error from './components/Error';
 import FileAndFolderUpload from './components/FileAndFolderUpload';
+import CreateProject from './components/CreateProject';
+import SearchResults from './components/SearchResults';
+import TagSearchResults from './components/TagSearchResults';
 
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/home" element={<Home />} />
+        <Route path="/project/:userName" element={<Home />} />
         <Route path="/" element={<Login />}/>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/search" element={<Search />} />
-<<<<<<< Updated upstream
-        <Route path="/tag/:tagName" element={<Tag />} />
-        <Route path="/project/:projectId" element={<Project />} />
-=======
         <Route path="/search-results" element={<SearchResults />} />
         <Route path="/tags" element={<Tag />} />
         <Route path="/tags/:tagName" element={<TagSearchResults />} />
         <Route path="/project/:userName/create" element={<CreateProject />} />
         <Route path="/project/:userName/:projectName" element={<Project />} />
         <Route path="/project/:userName/:projectName/upload" element={<FileAndFolderUpload />} />
->>>>>>> Stashed changes
         <Route path="/error" element={<Error />} />
       </Routes>
     </div>
