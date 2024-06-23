@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -47,7 +46,11 @@ export default function Project() {
             </div>
             <div>
                 <button onClick={handleUploadButtonClick}>upload</button>
-                <FileTree projectId={projectInfo.projectId}/>
+                <FileTree
+                    projectId={projectInfo.projectId} 
+                    userName={userName} 
+                    projectTitle={projectTitle}
+                />
             </div>
         </div>
     );
