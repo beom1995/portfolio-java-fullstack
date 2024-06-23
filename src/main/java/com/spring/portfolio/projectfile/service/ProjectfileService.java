@@ -59,16 +59,7 @@ public class ProjectfileService {
 	public ProjectfileDTO getProjectfileByFilePath(String fullPath) {
 		List<String> fileInfo = extractPathAndName(fullPath);
 		Projectfile entity = projectfileRepository.findByFilePathAndFileName(fileInfo.get(0), fileInfo.get(1));
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-		System.out.println(entity.toString());
-=======
 
->>>>>>> Stashed changes
-		return entityToDto(entity);
->>>>>>> Stashed changes
-		
 		return entityToDto(entity);
 	}
 	
