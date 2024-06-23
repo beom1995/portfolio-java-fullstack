@@ -1,5 +1,5 @@
 import axios from "axios";
-import react, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import FileTree from "./FileTree";
 
@@ -10,7 +10,6 @@ export default function Project() {
     const [tag, setTag] = useState('');
     const navigate = useNavigate();
     
-
     useEffect(() => {
         // axios 이용하여 projectName 이용하여 project 정보 가져오기
         console.log(projectTitle);
@@ -28,34 +27,16 @@ export default function Project() {
     }, [])
 
     const handleTagSelectSearch = () => {
-        navigate(`/search?q=${tag}`);
+        navigate(`/tags/${tag}`);
     }
-
-    const handleFileChange = (e) => {
-        
-    }
-
-    const handleFileUpload = () => {
-        // FIleUpload --> 파일 컴포넌트...
-    }
-
-    const handleFileDownload = () => {
-        // FileDownload --> 파일 컴포넌트...
-    }
-
-    const handleDeleteFile = () => {
-        // axios DELETE 메소드 사용
-        // FileDelete --> 파일 컴포넌트...
-
-    }
-
-    const navigate = useNavigate();
-
-    const { projectId } = useParams();
 
     const handleUploadButtonClick = () => {
-        navigate(`/project/${projectId}/upload`);
-    }
+        navigate(`/project/${userName}/${projectTitle}/upload`, {
+            state: {
+                projectInfo
+            }
+        });
+    };
 
     return (
         <div>
@@ -65,7 +46,11 @@ export default function Project() {
             </div>
             <div>
                 <button onClick={handleUploadButtonClick}>upload</button>
-                <FileTree projectId={projectInfo.projectId}/>
+                <FileTree
+                    projectId={projectInfo.projectId} 
+                    userName={userName} 
+                    projectTitle={projectTitle}
+                />
             </div>
         </div>
     );
