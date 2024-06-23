@@ -12,7 +12,6 @@ export default function Project() {
     
     useEffect(() => {
         // axios 이용하여 projectName 이용하여 project 정보 가져오기
-        console.log(projectTitle);
         axios.get(`/api/project/${userName}/${projectTitle}`)
              .then(response => {
                 const result = response.data;
