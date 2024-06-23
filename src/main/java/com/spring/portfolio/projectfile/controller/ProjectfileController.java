@@ -44,7 +44,6 @@ public class ProjectfileController {
 	private final ProjectService projectService;
 	
 	// 파일 목록 조회
-//	@GetMapping("/api/project/{projectId}/files")
 	@GetMapping("api/project/{userName}/{projectTitle}/files")
 	public List<FileNode> getFiles(@PathVariable String userName, @PathVariable String projectTitle) {
 		Project targetProject = projectService.getProjectByUserAndProjectTitle(userName, projectTitle);
@@ -56,7 +55,6 @@ public class ProjectfileController {
         } else {
         	return List.of();
         }
-		
 	}
 
 	private List<FileNode> buildFileTree(File projectDir) {
@@ -75,7 +73,6 @@ public class ProjectfileController {
 	                node.setChildren(buildFileTree(file));
 	            } else {
 	            	ProjectfileDTO targetProjectfile = projectfileService.getProjectfileByFilePath(file.getPath());
-	            	System.out.println(targetProjectfile.toString());
 	                node.setType("file");
 	                node.setName(targetProjectfile.getFileOriginalName());
 	                node.setFileId(targetProjectfile.getFileId());
@@ -161,8 +158,7 @@ public class ProjectfileController {
 		
 		Resource resource = null;
 		ProjectfileDTO targetProjectfile = projectfileService.getProjectfileByFileId(fileId);
-		String fullPath = targetProjectfile.getFilePath() + File.separator + targetProjectfile.getFileName() + ".txt";
-		System.out.println(fullPath);
+		String fullPath = targetProjectfile.getFilePath() + File.separator + targetProjectfile.getFileName();
 		Path path = Paths.get(fullPath);
 		
 		try {
