@@ -1,6 +1,5 @@
 package com.spring.portfolio.project.service;
 
-<<<<<<< Updated upstream
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
@@ -26,8 +25,8 @@ import com.spring.portfolio.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class ProjectService {
 	
 	private final ProjectRepository projectRepository;
@@ -144,29 +143,5 @@ public class ProjectService {
 		
 		return new PageResponseDTO<>(projects, fn);
 	}
-	
-=======
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
-import com.spring.portfolio.project.entity.Project;
-import com.spring.portfolio.project.repository.ProjectRepository;
-import com.spring.portfolio.projectfile.repository.ProjectfileRepository;
-
-@Service
-public class ProjectService {
-	private final ProjectRepository projectRepository;
-	
-	public ProjectService(ProjectRepository projectRepository) {
-		this.projectRepository = projectRepository;
-	}
-	
-	public Project getProjectByProjectId(Long projectId) {
-		return projectRepository.findById(projectId)
-					.orElseThrow(() -> new NoSuchElementException("Project not found with id: " + projectId));
-		
-	}
->>>>>>> Stashed changes
 }
+	

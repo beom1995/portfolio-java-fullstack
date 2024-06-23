@@ -16,20 +16,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-<<<<<<< Updated upstream
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-=======
-import lombok.Getter;
->>>>>>> Stashed changes
 
-@Getter
-@Entity
-@Getter
 @NoArgsConstructor
 @ToString
+@Getter
+@Entity
 public class Project extends BaseEntity {
 
 	@Id

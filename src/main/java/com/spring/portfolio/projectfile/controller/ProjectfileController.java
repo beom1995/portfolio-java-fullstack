@@ -2,7 +2,6 @@ package com.spring.portfolio.projectfile.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.spring.portfolio.project.entity.Project;
 import com.spring.portfolio.project.service.ProjectService;
 import com.spring.portfolio.projectfile.dto.ProjectfileDTO;
-import com.spring.portfolio.projectfile.entity.Projectfile;
 import com.spring.portfolio.projectfile.node.FileNode;
 import com.spring.portfolio.projectfile.service.ProjectfileService;
 
@@ -184,8 +182,6 @@ public class ProjectfileController {
 	// 파일 삭제
 	@DeleteMapping("/api/project/{projectId}/{fileId}")
 	public void deleteFile(@PathVariable Long projectId, @PathVariable Long fileId) {
-//		ProjectfileDTO targetProjectfile = projectfileService.getProjectfileByFileId(fileId);
-		System.out.println("delete 왓다1111");
 		projectfileService.deleteProjectfileByFileId(fileId);
 	}
 }
