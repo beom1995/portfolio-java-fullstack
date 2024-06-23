@@ -19,9 +19,8 @@ export default function FileTree({ projectId, userName, projectTitle }) {
         fetchFiles();
     }, []);
 
-    const handleFileDownload = async (path) => {
-        await axios.get(`/api/project/${userName}/${projectTitle}/download`, {
-            params: { filePath: path },
+    const handleFileDownload = async (fileId) => {
+        await axios.get(`/api/project/${userName}/${projectTitle}/${fileId}`, {
             responseType: 'blob',
         })
         .then(response => {
@@ -69,7 +68,7 @@ export default function FileTree({ projectId, userName, projectTitle }) {
                         </>
                     ) : (
                         <>
-                            <span onClick={() => handleFileDownload(node.path)}>{node.name}</span>
+                            <span onClick={() => handleFileDownload(node.fileId)}>{node.name}</span>
                             <button onClick={() => removeFile(node.fileId)} style={{ marginLeft: '10px', color: 'red' }}>X</button>
                         </>
                     )}
