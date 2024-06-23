@@ -44,9 +44,11 @@ public class ProjectfileController {
 	private final ProjectService projectService;
 	
 	// 파일 목록 조회
-	@GetMapping("/api/project/{projectId}/files")
-	public List<FileNode> getFiles(@PathVariable Long projectId) {
-		String projectDir = savePath + File.separator + projectId.toString();
+//	@GetMapping("/api/project/{projectId}/files")
+	@GetMapping("api/project/{userName}/{projectTitle}/files")
+	public List<FileNode> getFiles(@PathVariable String userName, @PathVariable String projectTitle) {
+		Project targetProject = projectService.getProjectByUserAndProjectTitle(userName, projectTitle);
+		String projectDir = savePath + File.separator + targetProject.getProjectId().toString();
 		File directory = new File(projectDir);
 		
 		if (directory.exists()) {
@@ -148,8 +150,10 @@ public class ProjectfileController {
 	}
 		
 	// 파일 다운로드
-	@GetMapping("/api/project/{projectId}/download")
-	public ResponseEntity<Resource> downloadFile(@PathVariable Long projectId, @RequestParam String filePath) {
+//	@GetMapping("/api/project/{projectId}/download")
+	@GetMapping("/api/project/{userName}/{projectTitle}/download")
+	public ResponseEntity<Resource> downloadFile(@PathVariable String userName
+			, @PathVariable String projectTitle, @RequestParam String filePath) {
 
 		/*
 		 * -- logic --
@@ -157,6 +161,7 @@ public class ProjectfileController {
 		 * 2) 리소스화(inputStream)
 		 * 3) return(header)
 		 */
+		Project targetProject = projectService.getProjectByUserAndProjectTitle(userName, projectTitle);
 		Resource resource = null;
 		String fullPath = savePath + filePath;
 		ProjectfileDTO targetProjectfile = projectfileService.getProjectfileByFilePath(fullPath);
