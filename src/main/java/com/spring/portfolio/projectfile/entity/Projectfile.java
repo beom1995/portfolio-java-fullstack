@@ -1,13 +1,5 @@
 package com.spring.portfolio.projectfile.entity;
 
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import org.hibernate.annotations.OnDelete;
-//import org.hibernate.annotations.OnDeleteAction;
-//
-//import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import com.spring.portfolio.project.entity.Project;
 
 import jakarta.persistence.Column;
