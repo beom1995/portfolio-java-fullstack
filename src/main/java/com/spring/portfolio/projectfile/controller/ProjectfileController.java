@@ -150,21 +150,19 @@ public class ProjectfileController {
 	}
 		
 	// 파일 다운로드
-//	@GetMapping("/api/project/{projectId}/download")
-	@GetMapping("/api/project/{userName}/{projectTitle}/download")
-	public ResponseEntity<Resource> downloadFile(@PathVariable String userName
-			, @PathVariable String projectTitle, @RequestParam String filePath) {
-
+	@GetMapping("/api/project/{userName}/{projectTitle}/{fileId}")
+	public ResponseEntity<Resource> downloadFile(@PathVariable Long fileId) {
 		/*
 		 * -- logic --
 		 * 1) 물리적인 파일 선택(경로)
 		 * 2) 리소스화(inputStream)
 		 * 3) return(header)
 		 */
-		Project targetProject = projectService.getProjectByUserAndProjectTitle(userName, projectTitle);
+		
 		Resource resource = null;
-		String fullPath = savePath + filePath;
-		ProjectfileDTO targetProjectfile = projectfileService.getProjectfileByFilePath(fullPath);
+		ProjectfileDTO targetProjectfile = projectfileService.getProjectfileByFileId(fileId);
+		String fullPath = targetProjectfile.getFilePath() + File.separator + targetProjectfile.getFileName() + ".txt";
+		System.out.println(fullPath);
 		Path path = Paths.get(fullPath);
 		
 		try {
