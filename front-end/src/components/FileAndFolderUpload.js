@@ -3,6 +3,8 @@ import { useDropzone } from 'react-dropzone';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from 'styled-components';
 import axios from 'axios';
+import Header from './Header';
+import Footer from './Footer';
 
 const InputUploadButton = styled.input.attrs({ type: 'file' })`
     display: none;
@@ -107,6 +109,7 @@ function FileAndFolderUpload() {
 
     return (
         <div>
+            <Header />
             <form onSubmit={handleUploadSubmit}>
                 <div {...getRootProps({ className: 'dropzone' })} style={{ border: '3px dashed #cccccc', padding: '20px' }}>
                     <input {...getInputProps()} />
@@ -150,6 +153,7 @@ function FileAndFolderUpload() {
                 </div>
                 <button type="submit">Upload</button>
             </form>
+            <Footer />
         </div>
     );
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
+import logo from '../logo.png';
 
 const HeaderArea = styled.header`
   text-align: center;
@@ -23,29 +24,26 @@ const Logo = styled.h1`
   margin: 0;
 `;
 
-const HomeButton = styled.button`
+const Button = styled.button`
   margin-top: 10px;
   padding: 10px;
-  background-color: #add8e6;
   color: white;
   border: none;
   border-radius: 5px;
-  font-size: 1rem;
   cursor: pointer;
-  &:hover {
-    background-color: #87ceeb;
-  }
+  
 `;
 
-const LogoutButton = styled.button`
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #add8e6;
-  color: white;
-  border: none;
-  border-radius: 5px;
+const HomeButton = styled(Button)`
+  height: 100px;
+  width: 150px;
+  background: url(${logo}) no-repeat center center;
+  background-size: contain;
+`;
+
+const LogoutButton = styled(Button)`
   font-size: 1rem;
-  cursor: pointer;
+  background-color: #add8e6;
   &:hover {
     background-color: #87ceeb;
   }
@@ -66,7 +64,7 @@ export default function Header() {
     
     return (
         <HeaderArea>
-            <HomeButton onClick={handleMoveToHome}>Home</HomeButton>
+            <HomeButton onClick={handleMoveToHome} />
             <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
         </HeaderArea>
     );
