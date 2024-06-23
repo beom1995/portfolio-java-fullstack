@@ -99,14 +99,14 @@ export default function CreateProject() {
                 Project Title: <input onChange={handleTitleChange} required></input>
                 <button onClick={handleCheckTitle}>check</button>
                 <br />
-                <form onChange={handleTagCheck}>
+                <div onChange={handleTagCheck} style={{ display: 'flex', flexWrap: 'wrap' }}>
                     {tags.map((tag) => (
-                        <li key={tag.id}>
+                        <span key={tag.id} style={{ marginRight: '10px' }}>
                             <input type="radio" value={tag.id} id={tag.name} name="tag" />
                             {tag.name}
-                        </li>
+                        </span>
                     ))}
-                </form>
+                </div>
                 <br />
                 <button onClick={handleProjectCreate}>create</button>
             </form>
