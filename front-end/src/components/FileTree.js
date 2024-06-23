@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 
-export default function FileTree({ projectId }) {
+export default function FileTree({ projectId, userName, projectTitle }) {
     const [files, setFiles] = useState([]);
 
     const fetchFiles = async () => {
-        
-        await axios.get(`/api/project/${projectId}/files`)
+        await axios.get(`/api/project/${userName}/${projectTitle}/files`)
         .then(response => {
             setFiles(response.data);
         })
@@ -15,20 +14,16 @@ export default function FileTree({ projectId }) {
             console.error('Failed to fetch files:', error);
         });
     };
-    
+
     useEffect(() => {
         fetchFiles();
     }, []);
 
-    const handleFileDownload = async (path) => {
-
-        await axios.get(`/api/project/${projectId}/download`, {
-            params: { filePath: path },
+    const handleFileDownload = async (fileId) => {
+        await axios.get(`/api/project/${userName}/${projectTitle}/${fileId}`, {
             responseType: 'blob',
         })
         .then(response => {
-            console.log('download success');
-
             // 서버에서 Content-Disposition 헤더를 가져와 파일 이름 추출
             const contentDisposition = response.headers['content-disposition'];
             let fileName = 'downloadedFile';
@@ -51,8 +46,6 @@ export default function FileTree({ projectId }) {
     };
 
     const removeFile = async (fileId) => {
-        console.log(fileId);
-
         await axios.delete(`/api/project/${projectId}/${fileId}`)
         .then(response => {
             console.log('remove success');
@@ -66,20 +59,19 @@ export default function FileTree({ projectId }) {
 
     const renderTree = (nodes) => (
         <ul>
-            {nodes.map((node) => (
-                <li key={node.path}>
+            {nodes.map((node, idx) => (
+                <li key={idx}>
                     {node.type === 'directory' ? (
                         <>
-                        <span>{node.name}</span>
-                        {renderTree(node.children)}
+                            <span>{node.name}</span>
+                            {renderTree(node.children)}
                         </>
                     ) : (
                         <>
-                            <span onClick={() => handleFileDownload(node.path)}>{node.name}</span>
+                            <span onClick={() => handleFileDownload(node.fileId)}>{node.name}</span>
                             <button onClick={() => removeFile(node.fileId)} style={{ marginLeft: '10px', color: 'red' }}>X</button>
                         </>
                     )}
-                    
                 </li>
             ))}
         </ul>

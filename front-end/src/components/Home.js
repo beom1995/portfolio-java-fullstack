@@ -2,6 +2,7 @@ import axios from "axios";
 import react, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Pagination from "./Pagination";
+import Header from "./Header";
 
 export default function Home() {
     const [projectInfo, setProjectInfo] = useState([]);
@@ -58,6 +59,7 @@ export default function Home() {
 
     return (
         <div>
+            <Header />
             <div>
                 <button onClick={handleProjectSearch}>Search</button>
                 <button onClick={handleTagSearch}>Tag</button>

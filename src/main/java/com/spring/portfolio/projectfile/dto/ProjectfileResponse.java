@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.spring.portfolio.project.dto.ProjectResponse;
 
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @NoArgsConstructor
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ProjectfileResponse {

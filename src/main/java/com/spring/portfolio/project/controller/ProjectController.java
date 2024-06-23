@@ -8,6 +8,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -85,8 +86,9 @@ public class ProjectController {
 	}
 	
 	// Project 삭제(cascade File 삭제)
-	@DeleteMapping("/api/project/{projectId}")
-	public ResponseEntity<String> deleteProjectByProjectId(@PathVariable Long projectId) {
+	@PreAuthorize("@projectSecurityExpression.isProjectOwner(authentication, #projectId)") // access only owner
+    @DeleteMapping("/api/project/{projectId}")
+	public ResponseEntity deleteProjectByProjectId(@PathVariable Long projectId) {
 		projectService.deleteProjectByProjectId(projectId);
 		return new ResponseEntity(HttpStatus.OK);
 	}

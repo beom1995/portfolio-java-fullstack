@@ -25,14 +25,17 @@ import com.spring.portfolio.user.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ProjectService {
 	
 	private final ProjectRepository projectRepository;
 	private final UserRepository userRepository;
 	private final TagRepository tagRepository;
+	private static final Logger log = LoggerFactory.getLogger(ProjectService.class);
 	
 	// User 기준으로 모든 Project 찾기
 	@Transactional
@@ -112,16 +115,9 @@ public class ProjectService {
 	public void deleteProjectByProjectId(Long projectId) {
 		Project project = projectRepository.findById(projectId)
 										   .orElseThrow(() -> new NoSuchElementException("존재하지 않는 프로젝트입니다."));
-//		@Value("${project.files.save.path}")
-//		String savePath;
-//
-//		String projectDir = savePath + File.separator + projectId.toString();
-//		File file = new File(projectDir);
-//
-//		if (file.exists()) {
-//		   file.delete()
-//		}
 		projectRepository.delete(project);
+		
+		log.info("Project deleted: {}", projectId);
 	}
 	
 	public ProjectResponse convertToProjectResponse(Project project) {
@@ -152,5 +148,12 @@ public class ProjectService {
 		
 		return new PageResponseDTO<>(projects, fn);
 	}
+
+
+	public boolean isProjectOwner(String username, Long projectId) {
+        Project project = projectRepository.findById(projectId)
+            .orElseThrow(() -> new NoSuchElementException("존재하지 않는 프로젝트입니다."));
+        return project.getUser().getUserName().equals(username);
+    }
 }
-	
+
