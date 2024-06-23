@@ -119,5 +119,18 @@ public class ProjectController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
+	// project search
+	@GetMapping("/api/search")
+	public ResponseEntity<List<ProjectResponse>> searchProjects(@RequestParam("keyword") String keyword) {
+		try {
+			List<Project> projects = projectService.searchProjectsByKeyword(keyword);
+	        	List<ProjectResponse> searchResults = projects.stream()
+	                		.map(projectService::convertToProjectResponse)
+	                		.collect(Collectors.toList());
+	        	return ResponseEntity.ok().body(searchResults);
+	    	} catch (Exception e) {
+	        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	    	}
+	}
 
 }
