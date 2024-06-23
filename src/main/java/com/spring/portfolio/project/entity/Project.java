@@ -2,8 +2,6 @@ package com.spring.portfolio.project.entity;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spring.portfolio.common.entity.BaseEntity;
 import com.spring.portfolio.projectfile.entity.Projectfile;
 import com.spring.portfolio.tag.entity.Tag;
@@ -18,7 +16,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,14 +36,14 @@ public class Project extends BaseEntity {
 	private String projectTitle;
 	
 	@ManyToOne
-	@JoinColumn
+	@JoinColumn(name = "user_id")
 	private User user;
 	
 	@ManyToOne
 	@JoinColumn(name = "tag_id")
 	private Tag tag;
 	
-	@OneToMany(mappedBy = "fileId", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE)
 	private List<Projectfile> files;
 
 	@Builder

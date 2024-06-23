@@ -24,12 +24,9 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 	Optional<Project> findByProjectTitle (String projectTitle);
 	
 	Page<Project> findAllByUser(User user, Pageable pageable);
-	
-//	@Query("SELECT EXISTS (SELECT p.projectTitle FROM Project p WHERE p.projectTitle =:projectTitle AND p.user =:user")
-//	public boolean existsProjectTitleByUser(@Param("projectTitle") String projectTitle, @Param("user") User user);
-	
-//	@Modifying
-//	@Query("select exists (select p.projectTitle from Project p where p.projectTitle =:projectTitle and p.user =:user")
+
 	boolean existsByProjectTitleAndUser(String projectTitle, User user);
 
+	Page<Project> findByProjectTitleContainingIgnoreCase(String keyword, Pageable pageable);
+	
 }
