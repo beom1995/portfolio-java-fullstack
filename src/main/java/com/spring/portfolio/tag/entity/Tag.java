@@ -31,8 +31,7 @@ public class Tag {
    @Column(name = "tag_name")
    private String tagName;
    
-   @OneToMany(mappedBy = "projectId")
-   @ToString.Exclude
+   @OneToMany(mappedBy = "tag")
    private List<Project> projects;
    
    @Builder
