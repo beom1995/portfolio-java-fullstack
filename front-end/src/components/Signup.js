@@ -35,13 +35,11 @@ const Signup = () => {
       setError('Passwords do not match');
       return;
     }
-
     try {
       const response = await axios.post('/api/signup', {
-        username,
-        password,
+        userName: username, 
+        userPassword: password 
       });
-
       setCookie('token', response.data.token, { path: '/' });
       setCookie('userId', response.data.userId, { path: '/' });
       setCookie('userName', response.data.userName, { path: '/' });
