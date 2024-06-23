@@ -12,3 +12,5 @@ npm i install react-router-dom
 npm i install styled-components
 
 npm i install react-dropzone
+
+npm i install file-saver
