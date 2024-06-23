@@ -79,8 +79,6 @@ export default function CreateProject() {
             return;
         }
 
-        console.log(projectTitle);
-        console.log(tagId);
         axios.post(`/api/project`, {
             projectTitle: projectTitle,
             tagId: tagId,
@@ -90,7 +88,7 @@ export default function CreateProject() {
             let title = response.data.projectTitle;
             navigate(`/project/${userName}/${title}`);
         })
-        .catch(error => console.log(error));
+        .catch(error => navigate(`/error`));
     }
 
     return (
@@ -103,8 +101,8 @@ export default function CreateProject() {
                 <form onChange={handleTagCheck}>
                     {tags.map((tag) => (
                         <li key={tag.id}>
-                            <input type="checkbox" value={tag.id} id={tag.name} />
-                            <label form={tag.name}>{tag.name}</label>
+                            <input type="radio" value={tag.id} id={tag.name} name="tag" />
+                            {tag.name}
                         </li>
                     ))}
                 </form>
