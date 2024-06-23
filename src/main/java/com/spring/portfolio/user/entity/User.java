@@ -34,8 +34,8 @@ public class User {
 	@Column(name = "user_password")
 	private String userPw;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Project> projects = new ArrayList<>();
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	private List<Project> projects;
 
 	@Builder
 	public User(int userId, String userName, String userPw, List<Project> projects) {

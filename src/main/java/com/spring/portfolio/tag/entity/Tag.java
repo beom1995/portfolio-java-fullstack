@@ -24,23 +24,22 @@ import lombok.ToString;
 @ToString
 public class Tag {
 
-	@Id
-	@Column(name = "tag_id")
-	private int tagId;
-	
-	@Column(name = "tag_name")
-	private String tagName;
-	
-	@OneToMany(mappedBy = "tag")
-	@ToString.Exclude
-	private List<Project> projects;
-	
-	@Builder
-	public Tag(int tagId, String tagName, List<Project> projects) {
-		super();
-		this.tagId = tagId;
-		this.tagName = tagName;
-		this.projects = projects;
-	}
-	
+   @Id
+   @Column(name = "tag_id")
+   private int tagId;
+   
+   @Column(name = "tag_name")
+   private String tagName;
+   
+   @OneToMany(mappedBy = "tag")
+   private List<Project> projects;
+   
+   @Builder
+   public Tag(int tagId, String tagName, List<Project> projects) {
+      super();
+      this.tagId = tagId;
+      this.tagName = tagName;
+      this.projects = projects;
+   }
+   
 }
