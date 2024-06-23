@@ -20,6 +20,7 @@ import com.spring.portfolio.tag.entity.Tag;
 import com.spring.portfolio.tag.repository.TagRepository;
 import com.spring.portfolio.user.dto.UserProjectResponse;
 import com.spring.portfolio.user.entity.User;
+import com.spring.portfolio.user.exception.UserNotFoundException;
 import com.spring.portfolio.user.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -40,7 +41,7 @@ public class ProjectService {
 	@Transactional
 	public List<Project> getAllProjectsByUserName(String userName) {
 		User user = userRepository.findByUserName(userName)
-								  .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
+								  .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 		
 		List<Project> projectList = projectRepository.findAllByUser(user);
 		return projectRepository.findAllByUser(user);
@@ -57,17 +58,17 @@ public class ProjectService {
 	@Transactional
 	public Project getProjectByUserAndProjectTitle(String userName, String projectTitle) {
 		User user = userRepository.findByUserName(userName)
-								  .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
+								  .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
 		return projectRepository.findByUserAndProjectTitle(user, projectTitle);
 	}
 	
 	// Project List Pagination
 	@Transactional
-	public PageResponseDTO<ProjectResponse, Project> getProjectPageList(PageRequestDTO pageRequest, String UserName) {
+	public PageResponseDTO<ProjectResponse, Project> getProjectPageList(PageRequestDTO pageRequest, String userName) {
 		
-		User user = userRepository.findByUserName(UserName)
-								  .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
+		User user = userRepository.findByUserName(userName)
+								  .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 		Pageable pageable = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
 		Page<Project> result = projectRepository.findAllByUser(user, pageable);
 
@@ -80,10 +81,10 @@ public class ProjectService {
 	@Transactional
 	public Project addProject(String userName, int tagId, String projectTitle) {
 		User user = userRepository.findByUserName(userName)
-								  .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
+								  .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 		
 		Tag tag = tagRepository.findById(tagId)
-							   .orElseThrow(() -> new NoSuchElementException("존재하지 않는 테그입니다."));
+							   .orElseThrow(() -> new NoSuchElementException("존재하지 않는 태그입니다."));
 		
 		Project project = Project.builder()
 								 .user(user)
@@ -99,18 +100,17 @@ public class ProjectService {
 	
 	// ProjectTitle 중복 확인
 	@Transactional
-	public String checkProjectTitle(String userName, String projectTitle) {
+	public void checkProjectTitle(String userName, String projectTitle) {
 		User user = userRepository.findByUserName(userName)
-								  .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
+								  .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 		boolean result = projectRepository.existsByProjectTitleAndUser(projectTitle, user);
 		
 		if(result) {
-			throw new DuplicateKeyException("이미 존재하는 프로젝트입니다.");
+			throw new DuplicateKeyException("이미 사용 중인 프로젝트 이름입니다.");
 		}
-		
-		return projectTitle;
 	}
 	
+	// project - file 삭제
 	@Transactional
 	public void deleteProjectByProjectId(Long projectId) {
 		Project project = projectRepository.findById(projectId)
