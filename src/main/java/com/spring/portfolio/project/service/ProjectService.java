@@ -59,15 +59,16 @@ public class ProjectService {
 		return projectRepository.findByUserAndProjectTitle(user, projectTitle);
 	}
 	
+	
 	@Transactional
-	public PageResponseDTO<ProjectResponse, Project> getProjectPageList(PageRequestDTO pageRequest) { // page == 몇 번째 페이지? / size == 한 페이지 당 몇 개?
+	public PageResponseDTO<ProjectResponse, Project> getProjectPageList(PageRequestDTO pageRequest, String UserName) {
 		
-		User user = userRepository.findByUserName(pageRequest.getUserName())
+		User user = userRepository.findByUserName(UserName)
 								  .orElseThrow(() -> new NoSuchElementException("유저 없음"));
 		Pageable pageable = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
 		Page<Project> result = projectRepository.findAllByUser(user, pageable);
 
-		Function<Project, ProjectResponse> fn = (entity -> convertToProjectResponse(entity)); // 서비스단에서 DTO로 변경하는 함수를 PageResponseDTO에 넘겨주어야 함
+		Function<Project, ProjectResponse> fn = (entity -> convertToProjectResponse(entity));
 		
 		return new PageResponseDTO<>(result, fn);
 	}

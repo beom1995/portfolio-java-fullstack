@@ -33,19 +33,19 @@ public class Projectfile {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "projectfile_id")
+	@Column(name = "file_id")
 	private Long fileId;
 	
-	@Column(name = "projectfile_path")
+	@Column(name = "file_path")
 	private String filePath;
 	
-	@Column(name = "projectfile_name")
+	@Column(name = "file_name")
 	private String fileName;
 	
-	@Column(name = "projectfile_original_name")
+	@Column(name = "file_original_name")
 	private String fileOriginalName;
 	
-	@Column(name = "projectfile_size")
+	@Column(name = "file_size")
 	private Long fileSize;
 	
 	@ManyToOne

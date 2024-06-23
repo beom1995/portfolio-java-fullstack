@@ -36,31 +36,27 @@ import lombok.RequiredArgsConstructor;
 public class ProjectController {
 	
 	private final ProjectService projectService;
-	private final UserRepository userRepository;
-	private final ProjectRepository projectRepository;
-	private final TagRepository tagRepository;
 	
-	@GetMapping("/api/projects/{userName}")
-	public ResponseEntity<List<ProjectResponse>> getAllProjectByUser(@PathVariable("userName") String userName) {
-		List<ProjectResponse> data = new ArrayList<>();
-		
-		try {
-			List<Project> projectList = projectService.getAllProjectsByUserName(userName);
-			for(Project project : projectList) {
-				ProjectResponse projectResponse = projectService.convertToProjectResponse(project);
-				data.add(projectResponse);
-			}
-		} catch(NoSuchElementException e) {
-			return new ResponseEntity<List<ProjectResponse>>(data, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
-		return new ResponseEntity<List<ProjectResponse>>(data, HttpStatus.OK);
-	}
+//	@GetMapping("/api/projects/{userName}")
+//	public ResponseEntity<List<ProjectResponse>> getAllProjectByUser(@PathVariable("userName") String userName) {
+//		List<ProjectResponse> data = new ArrayList<>();
+//		
+//		try {
+//			List<Project> projectList = projectService.getAllProjectsByUserName(userName);
+//			for(Project project : projectList) {
+//				ProjectResponse projectResponse = projectService.convertToProjectResponse(project);
+//				data.add(projectResponse);
+//			}
+//		} catch(NoSuchElementException e) {
+//			return new ResponseEntity<List<ProjectResponse>>(data, HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//		
+//		return new ResponseEntity<List<ProjectResponse>>(data, HttpStatus.OK);
+//	}
 	
-	@GetMapping("/api/projects/page")
-	public PageResponseDTO<ProjectResponse, Project> getProjectPage(PageRequestDTO pageRequest) {
-		System.out.println(pageRequest);
-		return projectService.getProjectPageList(pageRequest);
+	@GetMapping("/api/projects")
+	public PageResponseDTO<ProjectResponse, Project> getProjectPage(PageRequestDTO pageRequest, @RequestParam String userName) {
+		return projectService.getProjectPageList(pageRequest, userName);
 	}
 	
 	// Project 생성 
@@ -84,7 +80,6 @@ public class ProjectController {
 	// User의 단일 프로젝트 페이지 가져오기
 	@GetMapping("/api/project/{userName}/{projectTitle}")
 	public ResponseEntity<ProjectResponse> getProjectByUserNameAndProjectTitle(@PathVariable("userName") String userName, @PathVariable("projectTitle") String projectTitle) {
-		
 		ProjectResponse data = null;
 		
 		try {
@@ -94,7 +89,7 @@ public class ProjectController {
 			return new ResponseEntity<ProjectResponse>(data, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		return new ResponseEntity<ProjectResponse>(data, HttpStatus.OK);
+		return new ResponseEntity<ProjectResponse>(data, HttpStatusCode.valueOf(200));
 	}
 	
 	// ProjectTitle 중복 검증 및 검증 완료된 projectTitle 반환
