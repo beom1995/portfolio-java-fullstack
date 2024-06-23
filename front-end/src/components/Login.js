@@ -92,7 +92,7 @@ const Login = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await axios.post('/api/auth/login', { userName, userPassword });
+      const response = await axios.post('/api/login', { userName, userPassword });
       console.log('Full server response:', response.data);
       if (response.data.token) {
         const tokenExpiration = 60 * 60; // 토큰 만료 시간: 1시간
