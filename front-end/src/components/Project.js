@@ -28,10 +28,6 @@ export default function Project() {
     }, [])
 
     const handleTagSelectSearch = () => {
-        navigate(`/search?q=${tag}`);
-    };
-  
-  const handleTagSelectSearch = () => {
         navigate(`/tags/${tag}`);
     }
 
