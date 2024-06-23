@@ -21,6 +21,7 @@ export default function CreateProject() {
             { id: 6, name: 'React' },
             { id: 7, name: 'Node.js' },
             { id: 8, name: 'Ruby' },
+            { id: 9, name: 'etc..' }
           ]);
 
     const handleTitleChange = (e) => {
