@@ -1,8 +1,8 @@
 package com.spring.portfolio.project.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -21,14 +21,8 @@ import com.spring.portfolio.common.dto.PageResponseDTO;
 import com.spring.portfolio.project.dto.CreateProjectRequest;
 import com.spring.portfolio.project.dto.ProjectResponse;
 import com.spring.portfolio.project.entity.Project;
-import com.spring.portfolio.project.repository.ProjectRepository;
 import com.spring.portfolio.project.service.ProjectService;
-import com.spring.portfolio.tag.entity.Tag;
-import com.spring.portfolio.tag.repository.TagRepository;
-import com.spring.portfolio.user.entity.User;
-import com.spring.portfolio.user.repository.UserRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -54,6 +48,7 @@ public class ProjectController {
 //		return new ResponseEntity<List<ProjectResponse>>(data, HttpStatus.OK);
 //	}
 	
+	// Project List Pagination
 	@GetMapping("/api/projects")
 	public PageResponseDTO<ProjectResponse, Project> getProjectPage(PageRequestDTO pageRequest, @RequestParam String userName) {
 		return projectService.getProjectPageList(pageRequest, userName);
@@ -119,18 +114,10 @@ public class ProjectController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
-	// project search
+	// project search - paging
 	@GetMapping("/api/search")
-	public ResponseEntity<List<ProjectResponse>> searchProjects(@RequestParam("keyword") String keyword) {
-		try {
-			List<Project> projects = projectService.searchProjectsByKeyword(keyword);
-	        	List<ProjectResponse> searchResults = projects.stream()
-	                		.map(projectService::convertToProjectResponse)
-	                		.collect(Collectors.toList());
-	        	return ResponseEntity.ok().body(searchResults);
-	    	} catch (Exception e) {
-	        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-	    	}
+	public PageResponseDTO<ProjectResponse, Project> searchProjects(@RequestParam("keyword") String keyword, PageRequestDTO pageRequest) {
+		return projectService.searchProjectsByKeyword(keyword, pageRequest);
 	}
 
 }

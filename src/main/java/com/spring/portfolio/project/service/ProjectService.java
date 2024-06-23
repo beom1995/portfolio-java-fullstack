@@ -59,7 +59,7 @@ public class ProjectService {
 		return projectRepository.findByUserAndProjectTitle(user, projectTitle);
 	}
 	
-	
+	// Project List Pagination
 	@Transactional
 	public PageResponseDTO<ProjectResponse, Project> getProjectPageList(PageRequestDTO pageRequest, String UserName) {
 		
@@ -133,9 +133,15 @@ public class ProjectService {
 														 
 	}
 
-	// project search
-	public List<Project> searchProjectsByKeyword(String keyword) {
-        	return projectRepository.findByProjectTitleContainingIgnoreCase(keyword);
-    	}
+	// project search pagination
+	public PageResponseDTO<ProjectResponse, Project> searchProjectsByKeyword(String keyword, PageRequestDTO pageRequest){
+		Pageable pageable = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
+		
+		Page<Project> projects = projectRepository.findByProjectTitleContainingIgnoreCase(keyword, pageable);
+		
+		Function<Project, ProjectResponse> fn = (entity -> convertToProjectResponse(entity));
+		
+		return new PageResponseDTO<>(projects, fn);
+	}
 	
 }

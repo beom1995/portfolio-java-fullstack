@@ -27,6 +27,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
 	boolean existsByProjectTitleAndUser(String projectTitle, User user);
 
-	List<Project> findByProjectTitleContainingIgnoreCase(String keyword);
+	Page<Project> findByProjectTitleContainingIgnoreCase(String keyword, Pageable pageable);
 	
 }
