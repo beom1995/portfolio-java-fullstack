@@ -18,6 +18,9 @@
   * Tag: 태그 관련 기능 <br/>
 ![image](https://github.com/beom1995/portfolio-java-fullstack/assets/163812603/df897aac-8052-425c-8f04-b80f5886eed8)
 <br>
+![image](https://github.com/beom1995/portfolio-java-fullstack/assets/163812603/faa14321-2d6b-4b8c-a45c-b38791e65f24)
+<br>
+
 
 - API 명세서 <br />
 ![image](https://github.com/beom1995/portfolio-java-fullstack/assets/163812603/784aa3bb-bdf4-4c67-8715-9a10f6c3b31f) <br/>
