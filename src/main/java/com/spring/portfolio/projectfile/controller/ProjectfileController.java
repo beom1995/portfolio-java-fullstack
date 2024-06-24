@@ -51,7 +51,7 @@ public class ProjectfileController {
 		File directory = new File(projectDir);
 		
 		if (directory.exists()) {
-			return buildFileTree(new File(projectDir));            
+			return buildFileTree(directory);                       
         } else {
         	return List.of();
         }
