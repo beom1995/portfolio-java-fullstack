@@ -40,6 +40,10 @@ const SearchButton = styled.button`
   }
 `;
 
+const ContentsArea = styled.div`
+  height: 100vh;
+`;
+
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -72,6 +76,7 @@ const Search = () => {
   return (
     <div>
       <Header />
+      <ContentsArea>
       <SearchWrapper>
         <SearchInput
           type="text"
@@ -84,6 +89,7 @@ const Search = () => {
           <span role="img" aria-label="search">🔍</span>
         </SearchButton>
       </SearchWrapper>
+      </ContentsArea>
       <Footer />
     </div>
   );

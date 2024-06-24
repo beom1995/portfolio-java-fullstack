@@ -65,6 +65,23 @@ const DeleteButton = styled.button`
   }
 `;
 
+const UploadButton = styled.button`
+  font-size: 1rem;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #19ce60;
+  &:hover {
+    background-color: #12b886;
+  }
+`;
+
+const ContentsArea = styled.div`
+  height: 100vh;
+  align: center;
+`;
+
 function FileAndFolderUpload() {
     const [files, setFiles] = useState([]);
 
@@ -85,22 +102,6 @@ function FileAndFolderUpload() {
         webkitdirectory: true,
         directory: true,
     });
-
-    const handleFileUploadChange = (event) => {
-        const uploadedFiles = event.target.files;
-        const Files = Array.from(uploadedFiles);
-        // const validFiles = getFilesSmallerThanMaxSize(uploadedFiles);
-
-        setFiles((prevFiles) => [...prevFiles, ...Files]);
-    };
-
-    const handleFolderUploadChange = (event) => {
-        const uploadedFiles = event.target.files;
-        const Files = Array.from(uploadedFiles);
-        // const validFiles = getFilesSmallerThanMaxSize(uploadedFiles);
-
-        setFiles((prevFiles) => [...prevFiles, ...Files]);
-    };
 
     const getFilesSmallerThanMaxSize = (Files) => {
         const maxSize = 50 * 1024 * 1024; // 50MB in bytes
@@ -152,49 +153,29 @@ function FileAndFolderUpload() {
     return (
         <div>
             <Header />
-            <form onSubmit={handleUploadSubmit}>
-                <div {...getRootProps({ className: 'dropzone' })} style={{ border: '3px dashed #cccccc', padding: '20px' }}>
-                    <input {...getInputProps()} />
-                    {isDragActive ?
-                        <h5>Drop the files here!</h5> : 
-                        <h5>Drag & Drop some files here, or click to upload files.</h5>
-                    }   
-                </div>
-                {/* <div>
-                    <CustomUploadButton htmlFor='file-upload-input'>
-                        파일 업로드
-                    </CustomUploadButton>
-                    <InputUploadButton
-                        id="file-upload-input"
-                        name="files" 
-                        multiple
-                        onChange={handleFileUploadChange}
-                    />
-                    <CustomUploadButton htmlFor='folder-upload-input'>
-                        폴더 업로드
-                    </CustomUploadButton>
-                    <InputUploadButton
-                        id="folder-upload-input"
-                        name="files"
-                        webkitdirectory="true" 
-                        directory="true" 
-                        multiple
-                        onChange={handleFolderUploadChange}
-                    />
-                </div> */}
-                <FileListWrapper>
-                    <FileListTitle>Waiting to be uploaded</FileListTitle>
-                    <FileList>
-                        {files && files.map((file, index) => (
-                            <FileItem key={index}>
-                                <FileName>{file.path || file.webkitRelativePath || file.name}</FileName>
-                                <DeleteButton onClick={() => removeFile(file.name)}>&times;</DeleteButton>
-                            </FileItem>
-                        ))}
-                    </FileList>
-                </FileListWrapper>
-                <button type="submit">Upload</button>
-            </form>
+            <ContentsArea>
+                <form onSubmit={handleUploadSubmit}>
+                    <div {...getRootProps({ className: 'dropzone' })} style={{ border: '3px dashed #cccccc', padding: '20px', width: '80vw' }}>
+                        <input {...getInputProps()} />
+                        {isDragActive ?
+                            <h5>Drop the files here!</h5> : 
+                            <h5>Drag & Drop some files here, or click to upload files.</h5>
+                        }   
+                    </div>
+                    <FileListWrapper>
+                        <FileListTitle>Waiting to be uploaded</FileListTitle>
+                        <FileList>
+                            {files && files.map((file, index) => (
+                                <FileItem key={index}>
+                                    <FileName>{file.path || file.webkitRelativePath || file.name}</FileName>
+                                    <DeleteButton onClick={() => removeFile(file.name)}>&times;</DeleteButton>
+                                </FileItem>
+                            ))}
+                        </FileList>
+                    </FileListWrapper>
+                    <UploadButton type="submit">Upload</UploadButton>
+                </form>
+            </ContentsArea>
             <Footer />
         </div>
     );

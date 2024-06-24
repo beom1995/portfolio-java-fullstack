@@ -62,6 +62,10 @@ const SearchButton = styled.button`
   }
 `;
 
+const ContentsArea = styled.div`
+  height: 100vh;
+`;
+
 const SearchResults = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
@@ -82,6 +86,7 @@ const SearchResults = () => {
   return (
     <div>
       <Header />
+      <ContentsArea>
       <ResultWrapper>
         <Title>Search Results</Title>
         {resultPage?.resultList?.length === 0 ? (
@@ -106,6 +111,7 @@ const SearchResults = () => {
           </div>
         )}
       </ResultWrapper>
+      </ContentsArea>
       <Footer />
     </div>
   );

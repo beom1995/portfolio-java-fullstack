@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from 'styled-components';
+import Header from "./Header";
+import Footer from "./Footer";
 
 const CreateProjectWrapper = styled.div`
   margin: 20px;
@@ -76,6 +78,10 @@ const TagItem = styled.label`
 
 const TagName = styled.span`
   margin-left: 8px;
+`;
+
+const ContentsArea = styled.div`
+  height: 100vh;
 `;
 
 export default function CreateProject() {
@@ -167,6 +173,8 @@ export default function CreateProject() {
 
   return (
     <CreateProjectWrapper>
+      <Header />
+      <ContentsArea>
       <Title>Create Project</Title>
       <Form>
         <InputWrapper>
@@ -197,6 +205,8 @@ export default function CreateProject() {
         </TagWrapper>
         <Button onClick={handleProjectCreate}>Create</Button>
       </Form>
+      </ContentsArea>
+      <Footer />
     </CreateProjectWrapper>
   );
 }
