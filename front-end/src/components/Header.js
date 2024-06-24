@@ -41,11 +41,15 @@ export default function Header() {
     const navigate = useNavigate();
 
     const handleMoveToHome = () => {
-        navigate(`/project/${cookies.userName}`);
+        if(cookies.token !== undefined){
+            navigate(`/project/${cookies.userName}`);
+        } else {
+            navigate(`/login`);
+        }
     };
-
+    
     const handleLogout = () => {
-        removeCookie('token');
+        removeCookie('token', { path: '/', domain: 'localhost' });
         navigate(`/login`);
     };
     
@@ -56,4 +60,4 @@ export default function Header() {
         </HeaderArea>
     );
 }
-
+  

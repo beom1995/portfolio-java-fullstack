@@ -3,36 +3,9 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { saveAs } from 'file-saver';
 
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  font-family: Arial, sans-serif;
-`;
-
-const HeaderRow = styled.tr`
-  background-color: #f8f9fa;
-  border-bottom: 2px solid #dee2e6;
-`;
-
-const HeaderCell = styled.th`
-  padding: 12px 15px;
-  text-align: left;
-  font-weight: bold;
-  color: #495057;
-`;
-
-const Row = styled.tr`
-  &:nth-child(even) {
-    background-color: #f8f9fa;
-  }
-  &:hover {
-    background-color: #e9ecef;
-  }
-`;
-
-const Cell = styled.td`
-  padding: 12px 15px;
-  border-bottom: 1px solid #dee2e6;
+const FileTreeContainer = styled.div`
+  width: 800px;
+  align: center;
 `;
 
 const Folder = styled.span`
@@ -50,11 +23,11 @@ const StyledUL = styled.ul`
 `;
 
 const StyledLI = styled.li`
-  display: block;
+  text-align: left;
   margin-top: 5px;
   margin-bottom: 5px;
-
 `;
+
 
 const LineDeco = styled.span`
   &:hover {
@@ -69,6 +42,7 @@ const NodenameSpan = styled.span`
     text-decoration: underline;
   }
 `;
+
 export default function FileTree({ projectId, userName, projectTitle }) {
     const [files, setFiles] = useState([]);
     const [openFolders, setOpenFolders] = useState({});
@@ -137,39 +111,39 @@ export default function FileTree({ projectId, userName, projectTitle }) {
           ...prevOpenFolders,
           [id]: !prevOpenFolders[id]
         }));
-      };
+    };
 
-    const renderNode = (node, idx) => (
-        <StyledLI key={idx}>
-        {node.type === 'directory' ? (
-            <>
-            <LineDeco>
-            <Folder onClick={() => toggleFolder(idx)}>
-                {openFolders[idx] ? '▼' : '▶'}
-            </Folder>
-            <NodenameSpan>{node.name}</NodenameSpan>
-            {openFolders[idx] && (
-                <StyledUL>
-                    {node.children.map(child => renderNode(child))}
-                </StyledUL>
+    const renderNode = (node) => (
+        <StyledLI key={node.path}>
+        <LineDeco>
+            {node.type === 'directory' ? (
+                <>
+                    <Folder onClick={() => toggleFolder(node.path)}>
+                        {openFolders[node.path] ? '▼' : '▶'}
+                    </Folder>
+                    <NodenameSpan>{node.name}</NodenameSpan>
+                    {openFolders[node.path] && (
+                        <StyledUL>
+                            {node.children.map(child => renderNode(child, child.path))}
+                        </StyledUL>
+                    )}
+                </>
+            ) : (
+                <>
+                    <File onClick={() => handleFileDownload(node.fileId)}><NodenameSpan>{node.name}</NodenameSpan></File>
+                    <button onClick={() => removeFile(node.fileId)} style={{ marginLeft: '10px', color: 'red' }}>X</button>
+                </>
             )}
-            </LineDeco>
-            </>
-        ) : (
-            <>
-            <LineDeco>
-                <File onClick={() => handleFileDownload(node.fileId)}><NodenameSpan>{node.name}</NodenameSpan></File>
-                <button onClick={() => removeFile(node.fileId)} style={{ marginLeft: '10px', color: 'red' }}>X</button>
-            </LineDeco>
-            </>
-        )}
+        </LineDeco>
         </StyledLI>
     );
 
     return (
-        <StyledUL>
-            {files.map((node, idx) => renderNode(node, idx))}
-        </StyledUL>
+        <FileTreeContainer>
+            <StyledUL>
+                {files.map((node) => renderNode(node))}
+            </StyledUL>
+        </FileTreeContainer>
     );
 
 };
