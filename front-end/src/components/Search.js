@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import SearchResults from './SearchResults';
+import Header from './Header';
+import Footer from './Footer';
 
 const SearchWrapper = styled.div`
   display: flex;
@@ -69,6 +71,7 @@ const Search = () => {
 
   return (
     <div>
+      <Header />
       <SearchWrapper>
         <SearchInput
           type="text"
@@ -81,7 +84,7 @@ const Search = () => {
           <span role="img" aria-label="search">🔍</span>
         </SearchButton>
       </SearchWrapper>
-      <SearchResults results={searchResults} />
+      <Footer />
     </div>
   );
 };
