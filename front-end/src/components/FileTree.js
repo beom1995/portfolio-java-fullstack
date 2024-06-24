@@ -3,18 +3,9 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { saveAs } from 'file-saver';
 
-const StyledUL = styled.ul`
-  list-style-type: none;
-  padding-left: 20px;
-`;
-
-const StyledLI = styled.li`
-  margin-bottom: 10px;
-`;
-
-const LineDeco = styled.div`
-  display: flex;
-  align-items: center;
+const FileTreeContainer = styled.div`
+  width: 800px;
+  align: center;
 `;
 
 const Folder = styled.span`
@@ -29,6 +20,22 @@ const File = styled.span`
   margin-right: 5px;
   font-size: 20px;
   color: #333;
+`;
+
+const StyledUL = styled.ul`
+  list-style-type: none;
+`;
+
+const StyledLI = styled.li`
+  text-align: left;
+  margin-top: 5px;
+  margin-bottom: 5px;
+`;
+
+const LineDeco = styled.span`
+  &:hover {
+    background-color: #f0f0f0;
+  }
 `;
 
 const NodenameSpan = styled.span`
@@ -120,39 +127,38 @@ export default function FileTree({ projectId, userName, projectTitle }) {
         }));
     };
 
-    const renderNode = (node, idx) => (
-        <StyledLI key={idx}>
-        {node.type === 'directory' ? (
-            <>
-            <LineDeco>
-            <Folder onClick={() => toggleFolder(idx)}>
-                {openFolders[idx] ? '▼' : '▶'}
-            </Folder>
-            <NodenameSpan>{node.name}</NodenameSpan>
-            </LineDeco>
-            {openFolders[idx] && (
-                <StyledUL>
-                    {node.children.map(child => renderNode(child))}
-                </StyledUL>
-            )}
-            </>
-        ) : (
-            <>
-            <LineDeco>
-                <File onClick={() => handleFileDownload(node.fileId)}>
+
+    const renderNode = (node) => (
+        <StyledLI key={node.path}>
+        <LineDeco>
+            {node.type === 'directory' ? (
+                <>
+                    <Folder onClick={() => toggleFolder(node.path)}>
+                        {openFolders[node.path] ? '▼' : '▶'}
+                    </Folder>
                     <NodenameSpan>{node.name}</NodenameSpan>
-                </File>
-                <DeleteButton onClick={() => removeFile(node.fileId)}>&times;</DeleteButton>
-            </LineDeco>
-            </>
-        )}
+                    {openFolders[node.path] && (
+                        <StyledUL>
+                            {node.children.map(child => renderNode(child, child.path))}
+                        </StyledUL>
+                    )}
+                </>
+            ) : (
+                <>
+                    <File onClick={() => handleFileDownload(node.fileId)}><NodenameSpan>{node.name}</NodenameSpan></File>
+                    <button onClick={() => removeFile(node.fileId)} style={{ marginLeft: '10px', color: 'red' }}>X</button>
+                </>
+            )}
+        </LineDeco>
         </StyledLI>
     );
 
     return (
-        <StyledUL>
-            {files.map((node, idx) => renderNode(node, idx))}
-        </StyledUL>
+        <FileTreeContainer>
+            <StyledUL>
+                {files.map((node) => renderNode(node))}
+            </StyledUL>
+        </FileTreeContainer>
     );
 
 };

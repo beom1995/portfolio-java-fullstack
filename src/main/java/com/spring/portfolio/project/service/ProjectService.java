@@ -1,9 +1,13 @@
 package com.spring.portfolio.project.service;
 
+import java.io.File;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +19,7 @@ import com.spring.portfolio.common.dto.PageResponseDTO;
 import com.spring.portfolio.project.dto.ProjectResponse;
 import com.spring.portfolio.project.entity.Project;
 import com.spring.portfolio.project.repository.ProjectRepository;
+import com.spring.portfolio.projectfile.entity.Projectfile;
 import com.spring.portfolio.tag.dto.TagProjectResponse;
 import com.spring.portfolio.tag.entity.Tag;
 import com.spring.portfolio.tag.repository.TagRepository;
@@ -25,8 +30,6 @@ import com.spring.portfolio.user.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +39,9 @@ public class ProjectService {
 	private final UserRepository userRepository;
 	private final TagRepository tagRepository;
 	private static final Logger log = LoggerFactory.getLogger(ProjectService.class);
+	
+	@Value("${project.files.save.path}")
+	String savePath;
 	
 	// User 기준으로 모든 Project 찾기
 	@Transactional
@@ -115,7 +121,23 @@ public class ProjectService {
 	public void deleteProjectByProjectId(Long projectId) {
 		Project project = projectRepository.findById(projectId)
 										   .orElseThrow(() -> new NoSuchElementException("존재하지 않는 프로젝트입니다."));
-		projectRepository.delete(project);
+		
+		// 파일 존재 시 서버에 저장된 파일 + 디렉터리 삭제 + DBMS 레코드 삭제(cascade 파일 레코드 삭제)
+		if(project.getFiles().size() != 0) {
+			String projectDir = savePath + File.separator + projectId.toString();
+			File directory = new File(projectDir);
+			File[] files = directory.listFiles();
+			
+			for(File file : files) {
+				file.delete();
+			}
+			
+			directory.delete();
+			projectRepository.delete(project);
+			
+		} else { // 파일 없을 시 DBMS 레코드 삭제
+			projectRepository.delete(project);
+		}
 		
 		log.info("Project deleted: {}", projectId);
 	}
