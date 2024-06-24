@@ -46,7 +46,7 @@ public class ProjectfileController {
 	// 파일 목록 조회
 	@GetMapping("api/project/{userName}/{projectTitle}/files")
 	public List<FileNode> getFiles(@PathVariable String userName, @PathVariable String projectTitle) {
-		Project targetProject = projectService.getProjectByUserAndProjectTitle(userName, projectTitle);
+		Project targetProject = projectService.getProjectByUserAndProjectTitle(userName, projectTitle.replace("+", " "));
 		String projectDir = savePath + File.separator + targetProject.getProjectId().toString();
 		File directory = new File(projectDir);
 		
@@ -108,6 +108,7 @@ public class ProjectfileController {
 				
 				// 프로젝트 디렉토리가 생성되어 있지 않으면 디렉토리 생성
 				if(!directory.exists()) {
+					boolean result = directory.mkdir();
 					directory.mkdir();
 				}
 				
