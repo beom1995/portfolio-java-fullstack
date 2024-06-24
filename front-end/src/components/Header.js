@@ -29,38 +29,32 @@ const HomeButton = styled(Button)`
 
 const LogoutButton = styled(Button)`
   font-size: 1rem;
-  background-color: #add8e6;
+  background-color: #19ce60;
   &:hover {
-    background-color: #87ceeb;
+    background-color: #12b886;
   }
 `;
 
 export default function Header() {
-    const [cookies, removeCookie] = useCookies(['token', 'userId', 'userName']);
-    const navigate = useNavigate();
-
-    const handleMoveToHome = () => {
-        if(cookies.token !== undefined){
-            navigate(`/project/${cookies.userName}`);
-        } else {
-            navigate(`/login`);
-        }
-    };
-    
-    const handleLogout = () => {
-        removeCookie('token');
-        removeCookie('userId');
-        removeCookie('userName');
-        navigate(`/login`);
-    };
-    
-    return (
-        <HeaderArea>
-            <HomeButton onClick={handleMoveToHome} />
-            <p style={{'font.weight': 100}}>{cookies.userName}</p>
-            <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
-        </HeaderArea>
-    );
-}
+  const [cookies, setCookie, removeCookie] = useCookies(['token', 'userId', 'userName']);
   
+  const navigate = useNavigate();
 
+  const handleMoveToHome = () => {
+    navigate(`/project/${cookies.userName}`);
+  };
+
+  const handleLogout = () => {
+    removeCookie('token', { path: '/' });
+    removeCookie('userId', { path: '/' });
+    removeCookie('userName', { path: '/' });
+    navigate('/login');
+  };
+
+  return (
+    <HeaderArea>
+      <HomeButton onClick={handleMoveToHome} />
+      <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+    </HeaderArea>
+  );
+}
