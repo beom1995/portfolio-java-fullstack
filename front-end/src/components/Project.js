@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import styled from 'styled-components';
 import FileTree from "./FileTree";
 import Header from './Header';
@@ -50,15 +51,12 @@ const Button = styled.button`
   }
 `;
 
-const ContentsArea = styled.div`
-  height: 100vh;
-`;
-
 export default function Project() {
   const { userName, projectTitle } = useParams();
   const [projectInfo, setProjectInfo] = useState([]);
   const [fileInfo, setFileInfo] = useState([]);
   const [tag, setTag] = useState('');
+  const [cookies] = useCookies(['userId', 'userName']);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,6 +73,8 @@ export default function Project() {
       });
   }, []);
 
+  const isOwner = cookies.userId === projectInfo.user?.userId;
+
   const handleTagSelectSearch = () => {
     navigate(`/tags/${tag}`);
   };
@@ -90,22 +90,23 @@ export default function Project() {
   return (
     <div>
       <Header />
-      <ContentsArea>
       <ProjectWrapper>
         <ProjectHeader>
           <ProjectTitle>{projectInfo.projectTitle}</ProjectTitle>
           <ProjectTag onClick={handleTagSelectSearch}>#{tag}</ProjectTag>
         </ProjectHeader>
-        <ButtonWrapper>
-          <Button onClick={handleUploadButtonClick}>Upload Files</Button>
-        </ButtonWrapper>
+        {isOwner && (
+          <ButtonWrapper>
+            <Button onClick={handleUploadButtonClick}>Upload</Button>
+          </ButtonWrapper>
+        )}
         <FileTree
           projectId={projectInfo.projectId}
           userName={userName}
           projectTitle={projectTitle}
+          isOwner={isOwner}
         />
       </ProjectWrapper>
-      </ContentsArea>
       <Footer />
     </div>
   );
