@@ -155,7 +155,7 @@ function FileAndFolderUpload() {
             <Header />
             <ContentsArea>
                 <form onSubmit={handleUploadSubmit}>
-                    <div {...getRootProps({ className: 'dropzone' })} style={{ border: '3px dashed #cccccc', padding: '20px', width: '80vw' }}>
+                    <div {...getRootProps({ className: 'dropzone' })} style={{ border: '3px dashed #cccccc', padding: '20px' }}>
                         <input {...getInputProps()} />
                         {isDragActive ?
                             <h5>Drop the files here!</h5> : 
