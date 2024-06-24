@@ -48,13 +48,16 @@ export default function Header() {
     };
     
     const handleLogout = () => {
-        removeCookie('token', { path: '/', domain: 'localhost' });
+        removeCookie('token');
+        removeCookie('userId');
+        removeCookie('userName');
         navigate(`/login`);
     };
     
     return (
         <HeaderArea>
             <HomeButton onClick={handleMoveToHome} />
+            <p style={{'font.weight': 100}}>{cookies.userName}</p>
             <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
         </HeaderArea>
     );

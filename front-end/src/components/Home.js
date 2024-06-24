@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from 'styled-components';
 import Pagination from "./Pagination";
 import Header from "./Header";
+import Footer from "./Footer";
 
 const HomeWrapper = styled.div`
   margin: 20px;
@@ -141,7 +142,7 @@ export default function Home() {
         <Button onClick={handleTagSearch}>Tag</Button>
       </ButtonWrapper>
       <Title>My Projects</Title>
-      <Button onClick={handleAddProject}>Create Project</Button>
+      <Button onClick={handleAddProject}>+ New Project</Button>
       <ProjectList>
         {projectInfo.resultList &&
           projectInfo.resultList.map((project) => (
@@ -162,6 +163,7 @@ export default function Home() {
           ))}
       </ProjectList>
       <Pagination pageInfo={projectInfo} handlePageInfo={fetchProjectInfo} />
+      <Footer />
     </HomeWrapper>
   );
 }
