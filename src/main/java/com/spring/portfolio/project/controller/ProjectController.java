@@ -72,7 +72,7 @@ public class ProjectController {
 	@GetMapping("/api/project/{userName}/{projectTitle}")
 	public ResponseEntity<ProjectResponse> getProjectByUserNameAndProjectTitle(@PathVariable("userName") String userName, @PathVariable("projectTitle") String projectTitle) {
 		ProjectResponse data = null;
-		Project project = projectService.getProjectByUserAndProjectTitle(userName, projectTitle);
+		Project project = projectService.getProjectByUserAndProjectTitle(userName, projectTitle.replace("+", " "));
 		data = projectService.convertToProjectResponse(project);
 		
 		return new ResponseEntity<ProjectResponse>(data, HttpStatusCode.valueOf(200));
