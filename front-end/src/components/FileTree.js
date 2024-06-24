@@ -36,6 +36,8 @@ const LineDeco = styled.span`
   &:hover {
     background-color: #f0f0f0;
   }
+`;
+
 const NodenameSpan = styled.span`
   font-size: 17px;
   font-family: Arial, sans-serif;
