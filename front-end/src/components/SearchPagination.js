@@ -42,23 +42,21 @@ const PagePrevNext = styled.li`
   }
 `;
 
-export default function Pagination({ pageInfo, handlePageInfo }) {
+export default function SearchPagination({ keyword, pageInfo, handlePageInfo}) {
 
     return (
         <div>
             <PageList>
             {pageInfo.prev?
-            (<PagePrevNext onClick={() => handlePageInfo(Math.min(...pageInfo.pageList) - 11)}>&lt;</PagePrevNext>)
+            (<PagePrevNext onClick={() => handlePageInfo(keyword, Math.min(...pageInfo.pageList) - 11)}>&lt;</PagePrevNext>)
             :
             (<></>)
             }
-            <PageList>
             {pageInfo.pageList && pageInfo.pageList.map((pageNumber) => (
-                <PageNumber key={pageNumber} onClick={() => handlePageInfo(pageNumber - 1)}>{pageNumber}</PageNumber>
+                <PageNumber key={pageNumber} onClick={() => handlePageInfo(keyword, pageNumber - 1)}>{pageNumber}</PageNumber>
             ))}
-            </PageList>
             {pageInfo.next?
-            (<PagePrevNext onClick={() => handlePageInfo(Math.max(...pageInfo.pageList))}>&gt;</PagePrevNext>)
+            (<PagePrevNext onClick={() => handlePageInfo(keyword, Math.max(...pageInfo.pageList))}>&gt;</PagePrevNext>)
             :
             (<></>)
             }

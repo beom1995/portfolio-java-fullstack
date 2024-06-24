@@ -14,7 +14,7 @@ import com.spring.portfolio.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;

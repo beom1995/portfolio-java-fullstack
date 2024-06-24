@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from 'styled-components';
 import axios from 'axios';
+import Header from './Header';
+import Footer from './Footer';
 
 const InputUploadButton = styled.input.attrs({ type: 'file' })`
     display: none;
@@ -21,12 +23,73 @@ const CustomUploadButton = styled.label`
     }
 `;
 
+const FileListWrapper = styled.div`
+  margin-top: 20px;
+`;
+
+const FileListTitle = styled.h3`
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+
+const FileList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+`;
+
+const FileItem = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  font-size: 17px;
+`;
+
+const FileName = styled.span`
+  flex: 1;
+  margin-right: 10px;
+`;
+
+const DeleteButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #ff4500;
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #ff0000;
+  }
+`;
+
+const UploadButton = styled.button`
+  font-size: 1rem;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #19ce60;
+  &:hover {
+    background-color: #12b886;
+  }
+`;
+
+const ContentsArea = styled.div`
+  height: 100vh;
+  align: center;
+`;
+
 function FileAndFolderUpload() {
     const [files, setFiles] = useState([]);
 
-    const { projectId } = useParams();
+    const { userName, projectTitle } = useParams();
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const projectInfo = location.state || {};
 
     const onDrop = (acceptedItems) => {
         const validFiles = getFilesSmallerThanMaxSize(acceptedItems);
@@ -35,27 +98,10 @@ function FileAndFolderUpload() {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
-        noClick: true,
         webkitRelativePath: true,
         webkitdirectory: true,
         directory: true,
     });
-
-    const handleFileUploadChange = (event) => {
-        const uploadedFiles = event.target.files;
-        const Files = Array.from(uploadedFiles);
-        // const validFiles = getFilesSmallerThanMaxSize(uploadedFiles);
-
-        setFiles((prevFiles) => [...prevFiles, ...Files]);
-    };
-
-    const handleFolderUploadChange = (event) => {
-        const uploadedFiles = event.target.files;
-        const Files = Array.from(uploadedFiles);
-        // const validFiles = getFilesSmallerThanMaxSize(uploadedFiles);
-
-        setFiles((prevFiles) => [...prevFiles, ...Files]);
-    };
 
     const getFilesSmallerThanMaxSize = (Files) => {
         const maxSize = 50 * 1024 * 1024; // 50MB in bytes
@@ -86,13 +132,14 @@ function FileAndFolderUpload() {
                 formData.append('paths', file.path);
             });
 
-            axios.post(`/api/project/${projectId}/files`, formData, {
+            axios.post(`/api/project/${projectInfo.projectInfo.projectId}/files`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
             .then(() => {
-                navigate(`/project/${projectId}`);
+                console.log('save');
+                navigate(`/project/${projectInfo.projectInfo.user.userName}/${projectInfo.projectInfo.projectTitle}`);
             })
             .catch(error => {
                 console.log('업로드 실패: ' + error);
@@ -105,49 +152,31 @@ function FileAndFolderUpload() {
 
     return (
         <div>
-            <form onSubmit={handleUploadSubmit}>
-                <div {...getRootProps({ className: 'dropzone' })} style={{ border: '3px dashed #cccccc', padding: '20px' }}>
-                    <input {...getInputProps()} />
-                    {isDragActive ?
-                        <h5>Drop the files here!</h5> : 
-                        <h5>Drag & Drop some files here</h5>
-                    }   
-                </div>
-                <div>
-                    <CustomUploadButton htmlFor='file-upload-input'>
-                        파일 업로드
-                    </CustomUploadButton>
-                    <InputUploadButton
-                        id="file-upload-input"
-                        name="files" 
-                        multiple
-                        onChange={handleFileUploadChange}
-                    />
-                    <CustomUploadButton htmlFor='folder-upload-input'>
-                        폴더 업로드
-                    </CustomUploadButton>
-                    <InputUploadButton
-                        id="folder-upload-input"
-                        name="files"
-                        webkitdirectory="true" 
-                        directory="true" 
-                        multiple
-                        onChange={handleFolderUploadChange}
-                    />
-                </div>
-                <div>
-                    <h3>Waiting to be uploaded</h3>
-                    <ul>
-                        {files && files.map((file, index) => (
-                            <li key={index} >
-                                {file.path || file.webkitRelativePath || file.name}
-                                <button onClick={() => removeFile(file.name)} style={{ marginLeft: '10px', color: 'red' }}>X</button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <button type="submit">Upload</button>
-            </form>
+            <Header />
+            <ContentsArea>
+                <form onSubmit={handleUploadSubmit}>
+                    <div {...getRootProps({ className: 'dropzone' })} style={{ border: '3px dashed #cccccc', padding: '20px' }}>
+                        <input {...getInputProps()} />
+                        {isDragActive ?
+                            <h5>Drop the files here!</h5> : 
+                            <h5>Drag & Drop some files here, or click to upload files.</h5>
+                        }   
+                    </div>
+                    <FileListWrapper>
+                        <FileListTitle>Waiting to be uploaded</FileListTitle>
+                        <FileList>
+                            {files && files.map((file, index) => (
+                                <FileItem key={index}>
+                                    <FileName>{file.path || file.webkitRelativePath || file.name}</FileName>
+                                    <DeleteButton onClick={() => removeFile(file.name)}>&times;</DeleteButton>
+                                </FileItem>
+                            ))}
+                        </FileList>
+                    </FileListWrapper>
+                    <UploadButton type="submit">Upload</UploadButton>
+                </form>
+            </ContentsArea>
+            <Footer />
         </div>
     );
 }
