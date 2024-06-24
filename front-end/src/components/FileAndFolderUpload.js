@@ -23,6 +23,48 @@ const CustomUploadButton = styled.label`
     }
 `;
 
+const FileListWrapper = styled.div`
+  margin-top: 20px;
+`;
+
+const FileListTitle = styled.h3`
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+
+const FileList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+`;
+
+const FileItem = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  font-size: 17px;
+`;
+
+const FileName = styled.span`
+  flex: 1;
+  margin-right: 10px;
+`;
+
+const DeleteButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #ff4500;
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #ff0000;
+  }
+`;
+
 function FileAndFolderUpload() {
     const [files, setFiles] = useState([]);
 
@@ -95,7 +137,8 @@ function FileAndFolderUpload() {
                 }
             })
             .then(() => {
-                navigate(`/project/${projectInfo.projectInfo.userName}/${projectInfo.projectInfo.projectName}`);
+                console.log('save');
+                navigate(`/project/${projectInfo.projectInfo.user.userName}/${projectInfo.projectInfo.projectTitle}`);
             })
             .catch(error => {
                 console.log('업로드 실패: ' + error);
@@ -139,17 +182,17 @@ function FileAndFolderUpload() {
                         onChange={handleFolderUploadChange}
                     />
                 </div> */}
-                <div>
-                    <h3>Waiting to be uploaded</h3>
-                    <ul>
+                <FileListWrapper>
+                    <FileListTitle>Waiting to be uploaded</FileListTitle>
+                    <FileList>
                         {files && files.map((file, index) => (
-                            <li key={index} >
-                                {file.path || file.webkitRelativePath || file.name}
-                                <button onClick={() => removeFile(file.name)} style={{ marginLeft: '10px', color: 'red' }}>X</button>
-                            </li>
+                            <FileItem key={index}>
+                                <FileName>{file.path || file.webkitRelativePath || file.name}</FileName>
+                                <DeleteButton onClick={() => removeFile(file.name)}>&times;</DeleteButton>
+                            </FileItem>
                         ))}
-                    </ul>
-                </div>
+                    </FileList>
+                </FileListWrapper>
                 <button type="submit">Upload</button>
             </form>
             <Footer />

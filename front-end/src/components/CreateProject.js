@@ -52,19 +52,30 @@ const TagWrapper = styled.div`
   margin-bottom: 20px;
 `;
 
-const TagItem = styled.span`
+const TagItem = styled.label`
   display: flex;
   align-items: center;
+  padding: 8px 12px;
   margin-right: 10px;
   margin-bottom: 10px;
+  background-color: ${props => props.checked ? '#19ce60' : '#f0f0f0'};
+  color: ${props => props.checked ? '#fff' : '#333'};
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: ${props => props.checked ? '#12b886' : '#e0e0e0'};
+  }
+
+  input[type="radio"] {
+    display: none;
+  }
 `;
 
-const TagInput = styled.input`
-  margin-right: 5px;
-`;
-
-const TagLabel = styled.label`
-  font-size: 16px;
+const TagName = styled.span`
+  margin-left: 8px;
 `;
 
 export default function CreateProject() {
@@ -73,7 +84,7 @@ export default function CreateProject() {
   const [isBlank, setIsBlank] = useState(true);
   const [projectTitle, setProjectTitle] = useState('');
   const [isNotDuplicate, setIsNotDuplicate] = useState(false);
-  const [tagId, setTagId] = useState(0);
+  const [selectedTag, setSelectedTag] = useState(null);
   const navigate = useNavigate();
   const [tags, setTags] = useState([
     { id: 1, name: 'CSS' },
@@ -115,8 +126,8 @@ export default function CreateProject() {
       .catch(error => alert('사용 불가능한 프로젝트 이름입니다.'));
   };
 
-  const handleTagCheck = (e) => {
-    setTagId(e.target.value);
+  const handleTagClick = (tagId) => {
+    setSelectedTag(tagId);
   };
 
   const handleProjectCreate = (e) => {
@@ -132,7 +143,7 @@ export default function CreateProject() {
       return;
     }
 
-    if (tagId === 0) {
+    if (!selectedTag) {
       alert('태그를 선택하세요.');
       return;
     }
@@ -144,7 +155,7 @@ export default function CreateProject() {
 
     axios.post(`/api/project`, {
       projectTitle: projectTitle,
-      tagId: tagId,
+      tagId: selectedTag,
       userName: userName
     })
       .then(response => {
@@ -169,15 +180,18 @@ export default function CreateProject() {
         </InputWrapper>
         <TagWrapper>
           {tags.map((tag) => (
-            <TagItem key={tag.id}>
-              <TagInput
+            <TagItem
+              key={tag.id}
+              checked={selectedTag === tag.id}
+              onClick={() => handleTagClick(tag.id)}
+            >
+              <input
                 type="radio"
                 value={tag.id}
                 id={tag.name}
                 name="tag"
-                onChange={handleTagCheck}
               />
-              <TagLabel htmlFor={tag.name}>{tag.name}</TagLabel>
+              <TagName>{tag.name}</TagName>
             </TagItem>
           ))}
         </TagWrapper>
