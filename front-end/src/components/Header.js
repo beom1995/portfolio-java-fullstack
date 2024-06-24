@@ -36,22 +36,28 @@ const LogoutButton = styled(Button)`
 `;
 
 export default function Header() {
-  const [cookies, removeCookie] = useCookies(['token', 'userId', 'userName']);
-  const navigate = useNavigate();
+    const [cookies, removeCookie] = useCookies(['token', 'userId', 'userName']);
+    const navigate = useNavigate();
 
-  const handleMoveToHome = () => {
-    navigate(`/project/${cookies.userName}`);
-  };
-
-  const handleLogout = () => {
-    removeCookie('token');
-    navigate(`/login`);
-  };
-
-  return (
-    <HeaderArea>
-      <HomeButton onClick={handleMoveToHome} />
-      <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
-    </HeaderArea>
-  );
+    const handleMoveToHome = () => {
+        if(cookies.token !== undefined){
+            navigate(`/project/${cookies.userName}`);
+        } else {
+            navigate(`/login`);
+        }
+    };
+    
+    const handleLogout = () => {
+        removeCookie('token', { path: '/', domain: 'localhost' });
+        navigate(`/login`);
+    };
+    
+    return (
+        <HeaderArea>
+            <HomeButton onClick={handleMoveToHome} />
+            <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+        </HeaderArea>
+    );
 }
+  
+
