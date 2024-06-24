@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../logo.png';
 
 const HeaderArea = styled.header`
-  text-align: center;
-  font-size: 2rem;
-  color: #333;
-  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
 `;
 
 const Button = styled.button`
@@ -18,7 +18,6 @@ const Button = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  
 `;
 
 const HomeButton = styled(Button)`
@@ -61,3 +60,4 @@ export default function Header() {
     );
 }
   
+

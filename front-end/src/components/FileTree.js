@@ -10,12 +10,16 @@ const FileTreeContainer = styled.div`
 
 const Folder = styled.span`
   cursor: pointer;
-  margin-right: 5px;
-  font-weight: 900;
+  margin-right: 10px;
+  font-size: 20px;
+  color: #888;
 `;
 
 const File = styled.span`
   cursor: pointer;
+  margin-right: 5px;
+  font-size: 20px;
+  color: #333;
 `;
 
 const StyledUL = styled.ul`
@@ -28,18 +32,26 @@ const StyledLI = styled.li`
   margin-bottom: 5px;
 `;
 
-
 const LineDeco = styled.span`
   &:hover {
     background-color: #f0f0f0;
   }
+const NodenameSpan = styled.span`
+  font-size: 17px;
+  font-family: Arial, sans-serif;
 `;
 
-const NodenameSpan = styled.span`
+const DeleteButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #ff4500;
+  font-size: 20px;
   cursor: pointer;
+  margin-left: 10px;
+  transition: color 0.3s;
 
   &:hover {
-    text-decoration: underline;
+    color: #ff0000;
   }
 `;
 
@@ -112,6 +124,7 @@ export default function FileTree({ projectId, userName, projectTitle }) {
           [id]: !prevOpenFolders[id]
         }));
     };
+
 
     const renderNode = (node) => (
         <StyledLI key={node.path}>

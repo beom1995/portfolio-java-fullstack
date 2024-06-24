@@ -2,123 +2,184 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import ErrorModal from './Error';
+import styled from 'styled-components';
+import Footer from './Footer';
+import logo from '../logo.png'; // 로고 이미지 import
+
+const SignupWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f6f7;
+`;
+
+const LogoWrapper = styled.div`
+  margin-bottom: 30px;
+`;
+
+const Logo = styled.img`
+  width: 200px;
+  height: auto;
+`;
+
+const SignupForm = styled.form`
+  width: 450px;
+  background-color: #fff;
+  border: 1px solid #c6c6c6;
+  padding: 50px 30px;
+  border-radius: 5px;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
+`;
+
+const Title = styled.h1`
+  font-size: 24px;
+  color: #03c75a;
+  text-align: center;
+  margin-bottom: 30px;
+`;
+
+const InputWrapper = styled.div`
+  margin-bottom: 20px;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  height: 50px;
+  border: 1px solid #c6c6c6;
+  padding: 0 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  &:focus {
+    outline: none;
+    border-color: #03c75a;
+  }
+`;
+
+const Button = styled.button`
+  width: 100%;
+  height: 50px;
+  background-color: #03c75a;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background-color: #02b351;
+  }
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  text-align: center;
+  margin-bottom: 20px;
+`;
 
 const Signup = () => {
-    const [userName, setUserName] = useState('');
-    const [userPassword, setUserPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState(null);
-    const [showWarning, setShowWarning] = useState(false);
-    const [showUsernameWarning, setShowUsernameWarning] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);  // 로딩 상태 추가
-    const navigate = useNavigate();
-  
-    const handleUserNameChange = (e) => {
-      const trimmedUserName = e.target.value.trim();
-      if (trimmedUserName !== e.target.value) {
-        setShowUsernameWarning(true);
-      } else {
-        setShowUsernameWarning(false);
-      }
-      setUserName(trimmedUserName);
-    };
-  
-    const handlePasswordChange = (e) => {
-      setUserPassword(e.target.value);
-    };
-  
-    const handleConfirmPasswordChange = (e) => {
-      setConfirmPassword(e.target.value);
-    };
-  
-    const handleSignup = async () => {
-      if (!userName.trim() || !userPassword.trim() || !confirmPassword.trim()) {
-        setShowWarning(true);
-        return;
-      }
-  
-      if (userPassword !== confirmPassword) {
-        setError({ message: 'Passwords do not match' });
-        return;
-      }
-  
-      setIsLoading(true);  // 로딩 시작
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const [cookies, setCookie] = useCookies(['token', 'userId', 'userName']);
 
-      try {
-        const response = await axios.post('/api/users/signup', {
-          userName: userName,
-          userPassword: userPassword
-        });
-        
-        // 회원가입 성공 시 처리
-        console.log('Signup successful:', response.data);
-        // 로그인 페이지로 이동
-        navigate('/login');
-      } catch (err) {
-        if (err.response) {
-          // 서버가 응답한 에러 메시지 사용
-          setError({ statusCode: err.response.status, message: err.response.data });
-        } else {
-          setError({ message: 'Failed to sign up. Please try again.' });
-        }
-      } finally {
-        setIsLoading(false);  // 로딩 종료
-      }
-    };
-  
-    return (
-      <div>
-        <h1>Sign Up</h1>
-        <div>
-          <label htmlFor="userName">Username:</label>
-          <input
-            type="text"
-            id="userName"
-            value={userName}
-            onChange={handleUserNameChange}
-          />
-          {showUsernameWarning && (
-            <div className="warning">
-              <p>Please enter a username without any spaces.</p>
-            </div>
-          )}
-        </div>
-        <div>
-          <label htmlFor="userPassword">Password:</label>
-          <input
-            type="password"
-            id="userPassword"
-            value={userPassword}
-            onChange={handlePasswordChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="confirmPassword">Confirm Password:</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
-          />
-        </div>
-        {error && (
-          <ErrorModal
-            error={error}
-            onClose={() => setError(null)}
-          />
-        )}
-        {showWarning && (
-          <div className="warning">
-            <p>Please fill in all required fields.</p>
-            <button onClick={() => setShowWarning(false)}>OK</button>
-          </div>
-        )}
-        <button onClick={handleSignup} disabled={isLoading}>
-          {isLoading ? 'Signing up...' : 'Sign Up'}
-        </button>
-      </div>
-    );
+  const handleUsernameChange = (e) => {
+    const trimmedUsername = e.target.value.trim();
+    if (trimmedUsername.includes(' ')) {
+      setError('Username cannot contain spaces');
+      setUsername(e.target.value);
+    } else {
+      setError('');
+      setUsername(trimmedUsername);
+    }
   };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value);
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    try {
+      const response = await axios.post('/api/signup', {
+        userName: username, 
+        userPassword: password 
+      });
+      setCookie('token', response.data.token, { path: '/' });
+      setCookie('userId', response.data.userId, { path: '/' });
+      setCookie('userName', response.data.userName, { path: '/' });
+      navigate('/login');
+    } catch (error) {
+      if (error.response && error.response.data) {
+        setError(error.response.data);
+      } else {
+        setError('Failed to sign up');
+      }
+    }
+  };
+
+  return (
+    <>
+      <SignupWrapper>
+        <LogoWrapper>
+          <Logo src={logo} alt="Logo" />
+        </LogoWrapper>
+        <SignupForm onSubmit={handleSignup}>
+          <Title>Sign Up</Title>
+          <InputWrapper>
+            <Label htmlFor="username">Username:</Label>
+            <Input
+              type="text"
+              id="username"
+              value={username}
+              onChange={handleUsernameChange}
+              required
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <Label htmlFor="password">Password:</Label>
+            <Input
+              type="password"
+              id="password"
+              value={password}
+              onChange={handlePasswordChange}
+              required
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <Label htmlFor="confirmPassword">Confirm Password:</Label>
+            <Input
+              type="password"
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+              required
+            />
+          </InputWrapper>
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+          <Button type="submit">Sign Up</Button>
+        </SignupForm>
+      </SignupWrapper>
+      <Footer />
+    </>
+  );
+};
 
 export default Signup;

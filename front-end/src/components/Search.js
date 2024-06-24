@@ -1,6 +1,44 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import SearchResults from './SearchResults';
+import Header from './Header';
+import Footer from './Footer';
+
+const SearchWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+`;
+
+const SearchInput = styled.input`
+  width: 400px;
+  height: 40px;
+  padding: 0 10px;
+  border: 2px solid #19ce60;
+  border-radius: 20px;
+  font-size: 16px;
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #19ce60;
+  }
+`;
+
+const SearchButton = styled.button`
+  width: 50px;
+  height: 40px;
+  margin-left: 10px;
+  background-color: #19ce60;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  &:hover {
+    background-color: #12b886;
+  }
+`;
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -14,12 +52,11 @@ const Search = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(`/api/search?keyword=${searchTerm}`);
+      const response = await fetch(`/api/search?keyword=${searchTerm}&page=0`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      // 검색 결과를 상태에 저장하는 대신 새 페이지로 이동
       navigate(`/search-results?keyword=${searchTerm}`, { state: { results: data } });
     } catch (error) {
       console.error('Error searching projects:', error);
@@ -34,17 +71,20 @@ const Search = () => {
 
   return (
     <div>
-      <div>
-        <input
+      <Header />
+      <SearchWrapper>
+        <SearchInput
           type="text"
           placeholder="Search..."
           value={searchTerm}
           onChange={handleSearchTermChange}
           onKeyPress={handleKeyPress}
         />
-        <button onClick={handleSearch}>Search</button>
-      </div>
-      <SearchResults results={searchResults} />
+        <SearchButton onClick={handleSearch}>
+          <span role="img" aria-label="search">🔍</span>
+        </SearchButton>
+      </SearchWrapper>
+      <Footer />
     </div>
   );
 };

@@ -3,74 +3,94 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import styled from 'styled-components';
-import Header from './Header';
 import Footer from './Footer';
+import logo from '../logo.png';
 
-const FormWrapper = styled.div`
+const LoginWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   height: 100vh;
-  background-color: #f9f9f9;
+  background-color: #f5f6f7;
 `;
 
-const Form = styled.form`
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
-  text-align: left;
+const LogoWrapper = styled.div`
+  margin-bottom: 30px;
 `;
 
-const Label = styled.label`
-  display: block;
-  margin-bottom: 8px;
-  color: #333;
+const Logo = styled.img`
+  width: 200px;
+  height: auto;
+`;
+
+const LoginForm = styled.form`
+  width: 450px;
+  background-color: #fff;
+  border: 1px solid #c6c6c6;
+  padding: 50px 30px;
+  border-radius: 5px;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
+`;
+
+const Title = styled.h1`
+  font-size: 24px;
+  color: #03c75a;
+  text-align: center;
+  margin-bottom: 30px;
+`;
+
+const InputWrapper = styled.div`
+  margin-bottom: 20px;
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
+  height: 50px;
+  border: 1px solid #c6c6c6;
+  padding: 0 10px;
+  font-size: 16px;
   border-radius: 5px;
-  font-size: 1rem;
-`;
-
-const ErrorMessage = styled.div`
-  color: red;
-  margin-bottom: 20px;
+  &:focus {
+    outline: none;
+    border-color: #03c75a;
+  }
 `;
 
 const Button = styled.button`
   width: 100%;
-  padding: 10px;
-  background-color: ${(props) => (props.disabled ? '#ccc' : '#ff7f50')};
-  color: white;
+  height: 50px;
+  background-color: #03c75a;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
   border: none;
   border-radius: 5px;
-  font-size: 1rem;
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+  cursor: pointer;
   &:hover {
-    background-color: ${(props) => (props.disabled ? '#ccc' : '#ff4500')};
+    background-color: #02b351;
+  }
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
   }
 `;
 
-const SignUpButton = styled.button`
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #ffdf00;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
+const SignUpLink = styled.a`
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  color: #555;
+  text-decoration: none;
   &:hover {
-    background-color: #ffc700;
+    text-decoration: underline;
   }
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  text-align: center;
+  margin-bottom: 20px;
 `;
 
 const Login = () => {
@@ -92,7 +112,7 @@ const Login = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await axios.post('/api/auth/login', { userName, userPassword });
+      const response = await axios.post('/api/login', { userName, userPassword });
       console.log('Full server response:', response.data);
       if (response.data.token) {
         const tokenExpiration = 60 * 60; // 토큰 만료 시간: 1시간
@@ -128,37 +148,42 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="userName">Username:</label>
-          <input
-            type="text"
-            id="userName"
-            value={userName}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="userPassword">Password:</label>
-          <input
-            type="password"
-            id="userPassword"
-            value={userPassword}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        {error && <div className="error">{error}</div>}
-        <button type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
-      <button onClick={handleSignup}>Sign Up</button>
+    <>
+      <LoginWrapper>
+        <LogoWrapper>
+          <Logo src={logo} alt="Logo" />
+        </LogoWrapper>
+        <LoginForm onSubmit={handleSubmit}>
+          <Title>Login</Title>
+          <InputWrapper>
+            <Input
+              type="text"
+              id="userName"
+              value={userName}
+              onChange={handleInputChange}
+              placeholder="Username"
+              required
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <Input
+              type="password"
+              id="userPassword"
+              value={userPassword}
+              onChange={handleInputChange}
+              placeholder="Password"
+              required
+            />
+          </InputWrapper>
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+          <Button type="submit" disabled={loading}>
+            {loading ? 'Logging in...' : 'Login'}
+          </Button>
+          <SignUpLink href="/signup">Sign Up</SignUpLink>
+        </LoginForm>
+      </LoginWrapper>
       <Footer />
-    </div>
+    </>
   );
 };
 

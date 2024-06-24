@@ -33,8 +33,8 @@ function App() {
           <Route path="/tags" element={<Tag />} />
           <Route path="/tags/:tagName" element={<TagSearchResults />} />
           <Route path="/project/:userName/create" element={<CreateProject />} />
-          <Route path="/project/:userName/:projectName" element={<Project />} />
-          <Route path="/project/:userName/:projectName/upload" element={<FileAndFolderUpload />} />
+          <Route path="/project/:userName/:projectTitle" element={<Project />} />
+          <Route path="/project/:userName/:projectTitle/upload" element={<FileAndFolderUpload />} />
           <Route path="/error" element={<Error />} />
         </Routes>
       </AppContainer>
