@@ -50,6 +50,10 @@ const Button = styled.button`
   }
 `;
 
+const ContentsArea = styled.div`
+  height: 100vh;
+`;
+
 export default function Project() {
   const { userName, projectTitle } = useParams();
   const [projectInfo, setProjectInfo] = useState([]);
@@ -86,13 +90,14 @@ export default function Project() {
   return (
     <div>
       <Header />
+      <ContentsArea>
       <ProjectWrapper>
         <ProjectHeader>
           <ProjectTitle>{projectInfo.projectTitle}</ProjectTitle>
           <ProjectTag onClick={handleTagSelectSearch}>#{tag}</ProjectTag>
         </ProjectHeader>
         <ButtonWrapper>
-          <Button onClick={handleUploadButtonClick}>Upload</Button>
+          <Button onClick={handleUploadButtonClick}>Upload Files</Button>
         </ButtonWrapper>
         <FileTree
           projectId={projectInfo.projectId}
@@ -100,6 +105,7 @@ export default function Project() {
           projectTitle={projectTitle}
         />
       </ProjectWrapper>
+      </ContentsArea>
       <Footer />
     </div>
   );

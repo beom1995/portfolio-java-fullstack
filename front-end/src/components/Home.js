@@ -71,6 +71,10 @@ const DeleteButton = styled.button`
   }
 `;
 
+const ContentsArea = styled.div`
+  height: 100vh;
+`;
+
 export default function Home() {
   const [projectInfo, setProjectInfo] = useState([]);
   const [isDelete, setIsDelete] = useState(false);
@@ -137,6 +141,7 @@ export default function Home() {
   return (
     <HomeWrapper>
       <Header />
+      <ContentsArea>
       <ButtonWrapper>
         <Button onClick={handleProjectSearch}>Search</Button>
         <Button onClick={handleTagSearch}>Tag</Button>
@@ -163,6 +168,7 @@ export default function Home() {
           ))}
       </ProjectList>
       <Pagination pageInfo={projectInfo} handlePageInfo={fetchProjectInfo} />
+      </ContentsArea>
       <Footer />
     </HomeWrapper>
   );

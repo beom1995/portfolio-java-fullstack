@@ -69,6 +69,10 @@ const TagButton = styled(Link)`
   }
 `;
 
+const ContentsArea = styled.div`
+  height: 100vh;
+`;
+
 const TagSearchResults = () => {
   const { tagName } = useParams();
   const [projects, setProjects] = useState([]);
@@ -97,6 +101,7 @@ const TagSearchResults = () => {
   return (
     <div>
       <Header />
+      <ContentsArea>
       <ResultWrapper>
         <Title>Projects with tag: {tagName}</Title>
         <TagButton to="/tags">Choose other Tag</TagButton>
@@ -122,6 +127,7 @@ const TagSearchResults = () => {
           </div>
         )}
       </ResultWrapper>
+      </ContentsArea>
       <Footer />
     </div>
   );

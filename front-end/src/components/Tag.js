@@ -35,6 +35,10 @@ const TagLink = styled(Link)`
   }
 `;
 
+const ContentsArea = styled.div`
+  height: 100vh;
+`;
+
 const Tag = () => {
   const [tags] = useState([
     { id: 1, name: 'CSS' },
@@ -51,19 +55,21 @@ const Tag = () => {
   return (
     <div>
       <Header />
-      <TagWrapper>
-        <Title>Click Tag You want to Search</Title>
-        <TagList>
-          {tags.map((tag) => (
-            <TagLink
-              key={tag.id}
-              to={`/tags/${encodeURIComponent(tag.name)}`}
-            >
-              {tag.name}
-            </TagLink>
-          ))}
-        </TagList>
-      </TagWrapper>
+      <ContentsArea>
+        <TagWrapper>
+          <Title>Click Tag You want to Search</Title>
+          <TagList>
+            {tags.map((tag) => (
+              <TagLink
+                key={tag.id}
+                to={`/tags/${encodeURIComponent(tag.name)}`}
+              >
+                {tag.name}
+              </TagLink>
+            ))}
+          </TagList>
+        </TagWrapper>
+      </ContentsArea>
       <Footer />
     </div>
   );
