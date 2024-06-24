@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from 'styled-components';
 import FileTree from "./FileTree";
+import Header from './Header';
+import Footer from './Footer';
 
 const ProjectWrapper = styled.div`
   margin: 20px;
@@ -82,19 +84,23 @@ export default function Project() {
   };
 
   return (
-    <ProjectWrapper>
-      <ProjectHeader>
-        <ProjectTitle>{projectInfo.projectTitle}</ProjectTitle>
-        <ProjectTag onClick={handleTagSelectSearch}>#{tag}</ProjectTag>
-      </ProjectHeader>
-      <ButtonWrapper>
-        <Button onClick={handleUploadButtonClick}>Upload</Button>
-      </ButtonWrapper>
-      <FileTree
-        projectId={projectInfo.projectId}
-        userName={userName}
-        projectTitle={projectTitle}
-      />
-    </ProjectWrapper>
+    <div>
+      <Header />
+      <ProjectWrapper>
+        <ProjectHeader>
+          <ProjectTitle>{projectInfo.projectTitle}</ProjectTitle>
+          <ProjectTag onClick={handleTagSelectSearch}>#{tag}</ProjectTag>
+        </ProjectHeader>
+        <ButtonWrapper>
+          <Button onClick={handleUploadButtonClick}>Upload</Button>
+        </ButtonWrapper>
+        <FileTree
+          projectId={projectInfo.projectId}
+          userName={userName}
+          projectTitle={projectTitle}
+        />
+      </ProjectWrapper>
+      <Footer />
+    </div>
   );
 }
