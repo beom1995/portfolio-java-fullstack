@@ -2,74 +2,67 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { saveAs } from 'file-saver';
+import { useCookies } from 'react-cookie';
+import { useLocation } from 'react-router-dom';  // URL을 파싱하기 위해 추가
 
-const FileTreeContainer = styled.div`
-  width: 800px;
-  align: center;
+const StyledUL = styled.ul`
+  list-style-type: none;
+  padding-left: 20px;
+`;
+
+const StyledLI = styled.li`
+  margin-bottom: 10px;
+`;
+
+const LineDeco = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Folder = styled.span`
+  cursor: pointer;
   margin-right: 10px;
   font-size: 20px;
   color: #888;
 `;
 
 const File = styled.span`
+  cursor: pointer;
   margin-right: 5px;
   font-size: 20px;
   color: #333;
 `;
 
-const LineDeco = styled.span`
-  &:hover {
-    background-color: #f0f0f0;
-  }
-`;
-
-const FileList = styled.ul`
-  list-style-type: none;
-  padding: 0;
-`;
-
-const FileItem = styled.li`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  font-size: 17px;
-
-  &:hover {
-    background-color: #f0f0f0;
-  }
-`;
-
-const FileName = styled.span`
-  flex: 1;
-  margin-right: 10px;
-  cursor: pointer;
+const NodenameSpan = styled.span`
   font-size: 17px;
   font-family: Arial, sans-serif;
-  &:hover {
-    text-decoration: underline;
-  }
 `;
 
 const DeleteButton = styled.button`
   background-color: transparent;
   border: none;
   color: #ff4500;
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
+  margin-left: 10px;
   transition: color 0.3s;
+
+  &:hover {
+    color: #ff0000;
+  }
 `;
 
-export default function FileTree({ projectId, userName, projectTitle }) {
+export default function FileTree({ projectId, projectTitle }) {
     const [files, setFiles] = useState([]);
     const [openFolders, setOpenFolders] = useState({});
+    const [cookies] = useCookies(['userName']);
+    const location = useLocation();
+
+    // URL에서 userName 추출
+    const urlUserName = location.pathname.split('/')[2];
 
     const fetchFiles = async () => {
-        await axios.get(`/api/project/${userName}/${projectTitle}/files`)
+        await axios.get(`/api/project/${urlUserName}/${projectTitle}/files`)
         .then(response => {
             setFiles(response.data);
         })
@@ -80,14 +73,13 @@ export default function FileTree({ projectId, userName, projectTitle }) {
 
     useEffect(() => {
         fetchFiles();
-    }, []);
+    }, [urlUserName, projectTitle]);
 
     const handleFileDownload = async (fileId) => {
-        await axios.get(`/api/project/${userName}/${projectTitle}/${fileId}`, {
+        await axios.get(`/api/project/${urlUserName}/${projectTitle}/${fileId}`, {
             responseType: 'blob',
         })
         .then(response => {
-            // 서버에서 Content-Disposition 헤더를 가져와 파일 이름 추출
             const contentDisposition = response.headers['content-disposition'];
             let fileName = 'downloadedFile';
             if (contentDisposition) {
@@ -98,13 +90,10 @@ export default function FileTree({ projectId, userName, projectTitle }) {
                 }
             }
 
-            // FileSaver.js를 사용하여 파일 저장
             saveAs(new Blob([response.data]), fileName);
-
         })
         .catch(error => {
             console.error('Failed to download:', error);
-
         });
     };
 
@@ -116,16 +105,8 @@ export default function FileTree({ projectId, userName, projectTitle }) {
         })
         .catch(error => {
             console.error('Failed to remove:', error);
-
         });
     };
-
-    const isEmpty = function(obj) {
-        if(obj == null) {
-            return true;
-        }
-        return Object.keys(obj).length === 0;
-    }
 
     const toggleFolder = (id) => {
         setOpenFolders(prevOpenFolders => ({
@@ -134,44 +115,44 @@ export default function FileTree({ projectId, userName, projectTitle }) {
         }));
     };
 
+    const renderNode = (node, idx) => {
+        const isOwner = cookies.userName === urlUserName;  // 쿠키의 사용자 이름과 URL의 사용자 이름 비교
 
-    const renderNode = (node, path, depth = 0) => (
-        <FileItem key={path} style={{ paddingLeft: depth * 50 }}>
-        <LineDeco>
+        return (
+            <StyledLI key={idx}>
             {node.type === 'directory' ? (
                 <>
-                    <Folder onClick={() => toggleFolder(path)}>
-                        {openFolders[path] ? '▼' : '▶'}
-                        <FileName> {node.name}</FileName>
-                    </Folder>
-                    
-                    {openFolders[path] && (
-                        <FileList>
-                            {node.children
-                                .filter(child => child.type === 'directory')
-                                .map(child => renderNode(child, depth + 1))}
-                            {node.children
-                                .filter(child => child.type === 'file')
-                                .map(child => renderNode(child, depth + 1))}
-                        </FileList>
-                    )}
+                <LineDeco>
+                <Folder onClick={() => toggleFolder(idx)}>
+                    {openFolders[idx] ? '▼' : '▶'}
+                </Folder>
+                <NodenameSpan>{node.name}</NodenameSpan>
+                </LineDeco>
+                {openFolders[idx] && (
+                    <StyledUL>
+                        {node.children.map((child, childIdx) => renderNode(child, `${idx}-${childIdx}`))}
+                    </StyledUL>
+                )}
                 </>
             ) : (
                 <>
-                    <File onClick={() => handleFileDownload(node.fileId)}><FileName>{node.name}</FileName></File>
-                    <DeleteButton onClick={() => removeFile(node.fileId)}>&times;</DeleteButton>
+                <LineDeco>
+                    <File onClick={() => handleFileDownload(node.fileId)}>
+                        <NodenameSpan>{node.name}</NodenameSpan>
+                    </File>
+                    {isOwner && (  // 프로젝트 소유자인 경우에만 삭제 버튼을 렌더링
+                        <DeleteButton onClick={() => removeFile(node.fileId)}>&times;</DeleteButton>
+                    )}
+                </LineDeco>
                 </>
             )}
-        </LineDeco>
-        </FileItem>
-    );
+            </StyledLI>
+        );
+    };
 
     return (
-        <FileTreeContainer>
-            <FileList>
-                {files.map((node) => renderNode(node, node.path))}
-            </FileList>
-        </FileTreeContainer>
+        <StyledUL>
+            {files.map((node, idx) => renderNode(node, idx))}
+        </StyledUL>
     );
-
 };
