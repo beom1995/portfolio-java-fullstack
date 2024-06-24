@@ -17,8 +17,7 @@
   * Projectfile: 파일 관련 기능
   * Tag: 태그 관련 기능 <br/>
 ![image](https://github.com/beom1995/portfolio-java-fullstack/assets/163812603/df897aac-8052-425c-8f04-b80f5886eed8)
-<br>
-![image](https://github.com/beom1995/portfolio-java-fullstack/assets/163812603/faa14321-2d6b-4b8c-a45c-b38791e65f24)
+![image](https://github.com/beom1995/portfolio-java-fullstack/assets/163812603/becc119e-fa88-4130-af4b-d0d5415be89d)
 <br>
 
 
