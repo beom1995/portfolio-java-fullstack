@@ -29,14 +29,15 @@ const HomeButton = styled(Button)`
 
 const LogoutButton = styled(Button)`
   font-size: 1rem;
-  background-color: #add8e6;
+  background-color: #19ce60;
   &:hover {
-    background-color: #87ceeb;
+    background-color: #12b886;
   }
 `;
 
 export default function Header() {
-  const [cookies, removeCookie] = useCookies(['token', 'userId', 'userName']);
+  const [cookies, setCookie, removeCookie] = useCookies(['token', 'userId', 'userName']);
+  
   const navigate = useNavigate();
 
   const handleMoveToHome = () => {
@@ -44,8 +45,10 @@ export default function Header() {
   };
 
   const handleLogout = () => {
-    removeCookie('token');
-    navigate(`/login`);
+    removeCookie('token', { path: '/' });
+    removeCookie('userId', { path: '/' });
+    removeCookie('userName', { path: '/' });
+    navigate('/login');
   };
 
   return (
