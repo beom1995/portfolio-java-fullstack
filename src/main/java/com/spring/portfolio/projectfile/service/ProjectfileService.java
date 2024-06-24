@@ -12,6 +12,8 @@ import com.spring.portfolio.projectfile.entity.Projectfile;
 import com.spring.portfolio.projectfile.exception.FileNotFoundException;
 import com.spring.portfolio.projectfile.repository.ProjectfileRepository;
 
+import com.spring.portfolio.common.aspect.ProjectOwnerOnly;
+
 @Service
 public class ProjectfileService {
 	private final ProjectfileRepository projectfileRepository;
@@ -21,6 +23,7 @@ public class ProjectfileService {
 	}
 	
 	// 프로젝트에 파일 등록
+	@ProjectOwnerOnly
 	public void insertProjectfile(ProjectfileDTO projectfileDTO) {
 		projectfileRepository.saveAndFlush(DtoToEntity(projectfileDTO));
 	}
@@ -40,6 +43,7 @@ public class ProjectfileService {
 	}
 	
 	// fildID를 이용해서 파일 삭제
+	@ProjectOwnerOnly
 	public void deleteProjectfileByFileId(Long fileId) {		
 		ProjectfileDTO projectfile = getProjectfileByFileId(fileId);
 		File file = new File(projectfile.getFilePath(), projectfile.getFileName());
