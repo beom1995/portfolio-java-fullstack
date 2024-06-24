@@ -86,7 +86,7 @@ public class ProjectController {
 	}
 	
 	// Project 삭제(cascade File 삭제)
-	@PreAuthorize("@projectSecurityExpression.isProjectOwner(authentication, #projectId)") // access only owner
+//	@PreAuthorize("@projectSecurityExpression.isProjectOwner(authentication, #projectId)") // access only owner
     @DeleteMapping("/api/project/{projectId}")
 	public ResponseEntity deleteProjectByProjectId(@PathVariable Long projectId) {
 		projectService.deleteProjectByProjectId(projectId);
