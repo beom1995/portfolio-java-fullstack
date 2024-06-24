@@ -95,7 +95,7 @@ function FileAndFolderUpload() {
                 }
             })
             .then(() => {
-                navigate(`/project/${projectInfo.projectInfo.userName}/${projectInfo.projectInfo.projectName}`);
+                navigate(`/project/${projectInfo.projectInfo.user.userName}/${projectInfo.projectInfo.projectTitle}`);
             })
             .catch(error => {
                 console.log('업로드 실패: ' + error);
