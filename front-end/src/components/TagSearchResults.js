@@ -3,13 +3,16 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import SearchPagination from './SearchPagination';
+import Header from './Header';
+import Footer from './Footer';
+
 
 const ResultWrapper = styled.div`
   margin: 20px;
 `;
 
 const Title = styled.h1`
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
   margin-bottom: 20px;
 `;
@@ -20,11 +23,14 @@ const ProjectList = styled.ul`
 `;
 
 const ProjectItem = styled.li`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 `;
 
 const ProjectLink = styled(Link)`
-  font-size: 18px;
+  font-size: 20px;
   color: #19ce60;
   text-decoration: none;
   &:hover {
@@ -32,8 +38,8 @@ const ProjectLink = styled(Link)`
   }
 `;
 
-const ProjectAuthor = styled.p`
-  font-size: 14px;
+const ProjectAuthor = styled.span`
+  font-size: 20px;
   color: #888;
 `;
 
@@ -45,6 +51,22 @@ const LoadingMessage = styled.div`
 const ErrorMessage = styled.div`
   font-size: 16px;
   color: red;
+`;
+
+const TagButton = styled(Link)`
+  display: inline-block;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  background-color: #19ce60;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #12b886;
+  }
 `;
 
 const TagSearchResults = () => {
@@ -73,30 +95,35 @@ const TagSearchResults = () => {
   if (error) return <ErrorMessage>{error}</ErrorMessage>;
 
   return (
-    <ResultWrapper>
-      <Title>Projects with tag: {tagName}</Title>
-      {projects.length === 0 ? (
-        <p>No projects found with this tag.</p>
-      ) : (
-        <div>
-          <ProjectList>
-            {projects.resultList.map((project) => (
-              <ProjectItem key={project.projectId}>
-                <ProjectLink to={`/project/${project.user.userName}/${project.projectTitle}`}>
-                  {project.projectTitle}
-                </ProjectLink>
-                <ProjectAuthor>by {project.user.userName}</ProjectAuthor>
-              </ProjectItem>
-            ))}
-          </ProjectList>
-          <SearchPagination
-            keyword={tagName}
-            pageInfo={projects}
-            handlePageInfo={fetchProjects}
-          />
-        </div>
-      )}
-    </ResultWrapper>
+    <div>
+      <Header />
+      <ResultWrapper>
+        <Title>Projects with tag: {tagName}</Title>
+        <TagButton to="/tags">Choose other Tag</TagButton>
+        {projects.length === 0 ? (
+          <p>No projects found with this tag.</p>
+        ) : (
+          <div>
+            <ProjectList>
+              {projects.resultList.map((project) => (
+                <ProjectItem key={project.projectId}>
+                  <ProjectLink to={`/project/${project.user.userName}/${project.projectTitle}`}>
+                    {project.projectTitle}
+                  </ProjectLink>
+                  <ProjectAuthor>by {project.user.userName}</ProjectAuthor>
+                </ProjectItem>
+              ))}
+            </ProjectList>
+            <SearchPagination
+              keyword={tagName}
+              pageInfo={projects}
+              handlePageInfo={fetchProjects}
+            />
+          </div>
+        )}
+      </ResultWrapper>
+      <Footer />
+    </div>
   );
 };
 

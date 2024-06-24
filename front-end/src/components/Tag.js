@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import Header from './Header';
+import Footer from './Footer';
 
 const TagWrapper = styled.div`
   margin: 20px;
@@ -47,19 +49,23 @@ const Tag = () => {
   ]);
 
   return (
-    <TagWrapper>
-      <Title>Click Tag You want to Search</Title>
-      <TagList>
-        {tags.map((tag) => (
-          <TagLink
-            key={tag.id}
-            to={`/tags/${encodeURIComponent(tag.name)}`}
-          >
-            {tag.name}
-          </TagLink>
-        ))}
-      </TagList>
-    </TagWrapper>
+    <div>
+      <Header />
+      <TagWrapper>
+        <Title>Click Tag You want to Search</Title>
+        <TagList>
+          {tags.map((tag) => (
+            <TagLink
+              key={tag.id}
+              to={`/tags/${encodeURIComponent(tag.name)}`}
+            >
+              {tag.name}
+            </TagLink>
+          ))}
+        </TagList>
+      </TagWrapper>
+      <Footer />
+    </div>
   );
 };
 

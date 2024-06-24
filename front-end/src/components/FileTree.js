@@ -3,72 +3,53 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { saveAs } from 'file-saver';
 
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  font-family: Arial, sans-serif;
+const StyledUL = styled.ul`
+  list-style-type: none;
+  padding-left: 20px;
 `;
 
-const HeaderRow = styled.tr`
-  background-color: #f8f9fa;
-  border-bottom: 2px solid #dee2e6;
+const StyledLI = styled.li`
+  margin-bottom: 10px;
 `;
 
-const HeaderCell = styled.th`
-  padding: 12px 15px;
-  text-align: left;
-  font-weight: bold;
-  color: #495057;
-`;
-
-const Row = styled.tr`
-  &:nth-child(even) {
-    background-color: #f8f9fa;
-  }
-  &:hover {
-    background-color: #e9ecef;
-  }
-`;
-
-const Cell = styled.td`
-  padding: 12px 15px;
-  border-bottom: 1px solid #dee2e6;
+const LineDeco = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Folder = styled.span`
   cursor: pointer;
-  margin-right: 5px;
-  font-weight: 900;
+  margin-right: 10px;
+  font-size: 20px;
+  color: #888;
 `;
 
 const File = styled.span`
   cursor: pointer;
-`;
-
-const StyledUL = styled.ul`
-  list-style-type: none;
-`;
-
-const StyledLI = styled.li`
-  display: block;
-  margin-top: 5px;
-  margin-bottom: 5px;
-
-`;
-
-const LineDeco = styled.span`
-  &:hover {
-    background-color: #f0f0f0;
-  }
+  margin-right: 5px;
+  font-size: 20px;
+  color: #333;
 `;
 
 const NodenameSpan = styled.span`
+  font-size: 17px;
+  font-family: Arial, sans-serif;
+`;
+
+const DeleteButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #ff4500;
+  font-size: 20px;
   cursor: pointer;
+  margin-left: 10px;
+  transition: color 0.3s;
 
   &:hover {
-    text-decoration: underline;
+    color: #ff0000;
   }
 `;
+
 export default function FileTree({ projectId, userName, projectTitle }) {
     const [files, setFiles] = useState([]);
     const [openFolders, setOpenFolders] = useState({});
@@ -137,7 +118,7 @@ export default function FileTree({ projectId, userName, projectTitle }) {
           ...prevOpenFolders,
           [id]: !prevOpenFolders[id]
         }));
-      };
+    };
 
     const renderNode = (node, idx) => (
         <StyledLI key={idx}>
@@ -148,18 +129,20 @@ export default function FileTree({ projectId, userName, projectTitle }) {
                 {openFolders[idx] ? '▼' : '▶'}
             </Folder>
             <NodenameSpan>{node.name}</NodenameSpan>
+            </LineDeco>
             {openFolders[idx] && (
                 <StyledUL>
                     {node.children.map(child => renderNode(child))}
                 </StyledUL>
             )}
-            </LineDeco>
             </>
         ) : (
             <>
             <LineDeco>
-                <File onClick={() => handleFileDownload(node.fileId)}><NodenameSpan>{node.name}</NodenameSpan></File>
-                <button onClick={() => removeFile(node.fileId)} style={{ marginLeft: '10px', color: 'red' }}>X</button>
+                <File onClick={() => handleFileDownload(node.fileId)}>
+                    <NodenameSpan>{node.name}</NodenameSpan>
+                </File>
+                <DeleteButton onClick={() => removeFile(node.fileId)}>&times;</DeleteButton>
             </LineDeco>
             </>
         )}
