@@ -1,14 +1,24 @@
 # Portfolio Repository
 깃헙은 가라... 이제는 포트폴리오 레포지토리의 시대다! <br/>
 딱딱한 깃헙 대신 아기자기한 포트폴리오 레포지토리를 사용해 보세요. <br/>
-나의 프로젝트와 프로젝트에 저장된 파일을 한눈에 확인할 수 있고, 검색을 이용하여 타 사용자들의 프로젝트도 확인할 수 있습니다! <br />
+나의 프로젝트와 프로젝트에 저장된 파일을 한눈에 확인할 수 있고, 검색을 이용하여 타 사용자들의 프로젝트도 확인할 수 있습니다! <br/>
+<br/>
 
-### Project Info
+## Project Info
 - 프로젝트 기간: 2024.06.19 ~ 2024.06.24
 - 프로젝트 구성원
   * 👷 하영현(hypromellos@gmail.com) : https://github.com/beom1995 <br/>
-  * 👷 여수진(ysjin9992@gmail.com) : https://github.com/yeosujin
-  * 👷 이혜진(jesuisambitieux@gmail.com) : https://github.com/hj613
+  * 👷 여수진(ysjin9992@gmail.com) : https://github.com/yeosujin <br/>
+  * 👷 이혜진(jesuisambitieux@gmail.com) : https://github.com/hj613 <br/>
+  <br/>
+
+## :hammer_and_wrench: 기술 스택 
+![Spring Boot](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![React](https://img.shields.io/badge/react.js-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![VisualStudioCode](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC.svg?style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white) 
+![Git](https://img.shields.io/badge/Git-F05032.svg?style=for-the-badge&logo=Git&logoColor=white)
+<br/><br/>
 
 ### Project Architecture
 - Domain 구성
