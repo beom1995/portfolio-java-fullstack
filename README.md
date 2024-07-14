@@ -4,37 +4,41 @@
 나의 프로젝트와 프로젝트에 저장된 파일을 한눈에 확인할 수 있고, 검색을 이용하여 타 사용자들의 프로젝트도 확인할 수 있습니다! <br/>
 <br/>
 
-## Project Info
-- 프로젝트 기간: 2024.06.19 ~ 2024.06.24
+## ℹ️ Project Info
+- 프로젝트 기간 
+  * 2024.06.19. ~ 2024.06.24.
+    
 - 프로젝트 구성원
-  * 👷 하영현(hypromellos@gmail.com) : https://github.com/beom1995 <br/>
-  * 👷 여수진(ysjin9992@gmail.com) : https://github.com/yeosujin <br/>
-  * 👷 이혜진(jesuisambitieux@gmail.com) : https://github.com/hj613 <br/>
-  <br/>
+  * 👷 하영현(dihexyldecyl@gmail.com) --- https://github.com/beom1995
+  * 👷 여수진(ysjin9992@gmail.com) --- https://github.com/yeosujin
+  * 👷 이혜진(jesuisambitieux@gmail.com) --- https://github.com/hj613
+<br/>
 
 ## :hammer_and_wrench: 기술 스택 
 ![Spring Boot](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
-![React](https://img.shields.io/badge/react.js-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![React](https://img.shields.io/badge/react.js-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
 ![VisualStudioCode](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC.svg?style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white) 
 ![Git](https://img.shields.io/badge/Git-F05032.svg?style=for-the-badge&logo=Git&logoColor=white)
 <br/><br/>
 
-### Project Architecture
-- Domain 구성
-  * User: 회원 관련 기능
-  * Project: 프로젝트 관련 기능
-  * Projectfile: 파일 관련 기능
-  * Tag: 태그 관련 기능 <br/>
+## 📒 Domain
+  * User(회원 관련 기능)
+  * Project(프로젝트 관련 기능)
+  * Projectfile(파일 관련 기능)
+  * Tag(태그 관련 기능) <br/>
 ![image](https://github.com/beom1995/portfolio-java-fullstack/assets/163812603/df897aac-8052-425c-8f04-b80f5886eed8)
+<br/><br/>
+
+## :books: ERD
 ![image](https://github.com/beom1995/portfolio-java-fullstack/assets/163812603/becc119e-fa88-4130-af4b-d0d5415be89d)
-<br>
+<br/><br/>
 
+## 📑 API 명세서
+![image](https://github.com/beom1995/portfolio-java-fullstack/assets/163812603/784aa3bb-bdf4-4c67-8715-9a10f6c3b31f)
+<br/><br/>
 
-- API 명세서 <br />
-![image](https://github.com/beom1995/portfolio-java-fullstack/assets/163812603/784aa3bb-bdf4-4c67-8715-9a10f6c3b31f) <br/>
-
-### Staring Program...
+## 🪄 Starting Program...
 1. 저장소를 클론하여 설치합니다.
 2. 설치 후 /src/main/resources와 같이 소스 폴더를 만들고 application.properties 파일을 작성하여 저장 후 서버를 실행합니다.
 3. front-end/src/App.js로 이동하여 아래 명령어를 실행합니다.
@@ -57,7 +61,7 @@ npm i install react-dropzone
 npm i install file-saver
 ```
 
-### Feature
+## ⭐ Feature
 1. 로그인 기능
 2. 로그아웃 기능
 3. 회원가입 기능
